@@ -1,0 +1,54 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+## Microsatellite Genetic Analysis Workflow
+
+This document exists to explain the steps in the msat genetic analysis workflow, specifically for the RPBB population genetics project. However, it's intended to also remind me (and hopefully others) how to do these things for other projects in the future.
+
+The workflow assumes you have...
+
+-   Genotypes already (in this case, in a file provided by USDA)
+-   Various metadata files from field collections of the specimens
+
+## Various issues
+
+- Some metadata missing from Jay Watson (not critical)
+- There are five specimens marked as NA for sex from Genevieve Pugesek. What to do with these?
+    - From poking at their genotypes, they appear to be largely homozygous...it's possible they're males...but they are not completely homozygous...
+    - `r emo::ji("warning")`Revisit `r emo::ji("warning")` For now, I have chosen to exclude them
+- `r emo::ji("warning")`A bunch of Michelle Boone's records lack lat-long values!`r emo::ji("warning")`
+
+
+## Steps
+
+Note - corresponding files are named to reflect the numbering here (e.g. the file for merging metadata is "01a..." reflecting it's from section 1 item a)
+
+### 01. Merging metadata and genotype data
+
+a. Merge metadata sources
+b. Wrangle metadata and clean names of various parameters
+c. Spatial clustering of points to assign populations
+d. Merge metadata with genotype data
+
+### 02. Running COLONY and wrangling outputs
+
+a. Prepare COLONY input files
+b. Make DAT file for COLONY
+c. Run COLONY (done outside of R)
+d. Wrangle COLONY outputs
+
+
+### 03. Running various population genetic analysis
+
+a. Create geneind object and run quality checks
+b. Various popgen analysis
+    - summary stats, HE vs. HO, F-stats
+
+
+### 04. Additional analyses
+
+a. Colony Abundance
+b. Separation distances
+c. etc...

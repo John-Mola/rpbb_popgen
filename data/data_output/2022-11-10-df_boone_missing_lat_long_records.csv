@@ -1,0 +1,37 @@
+longname,sex,from_nest,which_nest,latitude,longitude,state,county,year,date,site,fl_genus,fl_species,internal_barcode
+mlb-ameslake-26jun21-affinis-01-leg,female,NA,NA,NA,NA,minnesota,ramsey,2021,2021-06-25T00:00:00Z,ames lake,Thalictrum,sp.,BAFF302
+mlb-nova-04jul21-affinis-01-leg,female,NA,NA,NA,NA,minnesota,ramsey,2021,2021-07-04T00:00:00Z,nova,Sorbaria,sorbifolia,BAFF303
+mlb-nova-04jul21-affinis-02-leg,female,NA,NA,NA,NA,minnesota,ramsey,2021,2021-07-04T00:00:00Z,nova,Sorbaria,sorbifolia,BAFF304
+mlb-nova-04jul21-affinis-03-leg,female,NA,NA,NA,NA,minnesota,ramsey,2021,2021-07-04T00:00:00Z,nova,Sorbaria,sorbifolia,BAFF305
+mlb-nova-04jul21-affinis-04-leg,female,NA,NA,NA,NA,minnesota,ramsey,2021,2021-07-04T00:00:00Z,nova,Sorbaria,sorbifolia,BAFF306
+mlb-nova-04jul21-affinis-05-leg,female,NA,NA,NA,NA,minnesota,ramsey,2021,2021-07-04T00:00:00Z,nova,Sorbaria,sorbifolia,BAFF307
+mlb-nova-04jul21-affinis-07-leg,female,NA,NA,NA,NA,minnesota,ramsey,2021,2021-07-04T00:00:00Z,nova,Sorbaria,sorbifolia,BAFF308
+mlb-nova-04jul21-affinis-08-leg,female,NA,NA,NA,NA,minnesota,ramsey,2021,2021-07-04T00:00:00Z,nova,Sorbaria,sorbifolia,BAFF309
+mlb-hamline-14july21-affinis-01-leg,female,NA,NA,NA,NA,minnesota,ramsey,2021,2021-07-14T00:00:00Z,hamline,Astilbe,sp.,BAFF326
+mlb-hamline-14july21-affinis-02-leg,female,NA,NA,NA,NA,minnesota,ramsey,2021,2021-07-14T00:00:00Z,hamline,Astilbe,sp.,BAFF327
+mlb-hamline-14july21-affinis-03-leg,female,NA,NA,NA,NA,minnesota,ramsey,2021,2021-07-14T00:00:00Z,hamline,Astilbe,sp.,BAFF328
+mlb-hamline-14july21-affinis-04-leg,female,NA,NA,NA,NA,minnesota,ramsey,2021,2021-07-14T00:00:00Z,hamline,Astilbe,sp.,BAFF329
+mlb-hamline-14july21-affinis-05-leg,female,NA,NA,NA,NA,minnesota,ramsey,2021,2021-07-14T00:00:00Z,hamline,Astilbe,sp.,BAFF330
+mlb-hamline-14july21-affinis-06-leg,female,NA,NA,NA,NA,minnesota,ramsey,2021,2021-07-14T00:00:00Z,hamline,Astilbe,sp.,BAFF331
+mlb-hamline-14july21-affinis-07-leg,female,NA,NA,NA,NA,minnesota,ramsey,2021,2021-07-14T00:00:00Z,hamline,Astilbe,sp.,BAFF332
+mlb-hamline-14july21-affinis-08-leg,female,NA,NA,NA,NA,minnesota,ramsey,2021,2021-07-14T00:00:00Z,hamline,Astilbe,sp.,BAFF333
+mlb-hamline-16july21-affinis-01-leg,female,NA,NA,NA,NA,minnesota,ramsey,2021,2021-07-16T00:00:00Z,hamline,Astilbe,sp.,BAFF334
+mlb-hamline-16july21-affinis-02-leg,female,NA,NA,NA,NA,minnesota,ramsey,2021,2021-07-16T00:00:00Z,hamline,Astilbe,sp.,BAFF335
+mlb-hamline-16july21-affinis-03-leg,female,NA,NA,NA,NA,minnesota,ramsey,2021,2021-07-16T00:00:00Z,hamline,Astilbe,sp.,BAFF336
+mlb-hamline-16july21-affinis-04-leg,female,NA,NA,NA,NA,minnesota,ramsey,2021,2021-07-16T00:00:00Z,hamline,Astilbe,sp.,BAFF337
+mlb-ameslake-20july21-affinis-01-leg,male,NA,NA,NA,NA,minnesota,NA,2021,2021-07-20T00:00:00Z,ames lake,Pycnanthemum,sp.,BAFF342
+mlb-ameslake-20july21-affinis-02-leg,male,NA,NA,NA,NA,minnesota,NA,2021,2021-07-20T00:00:00Z,ames lake,Pycnanthemum,sp.,BAFF343
+mlb-benson-31july21-affinis-01-leg,male,NA,NA,NA,NA,minnesota,NA,2021,2021-07-31T00:00:00Z,benson,Agastache,foeniculum,BAFF348
+mlb-benson-31july21-affinis-02-leg,male,NA,NA,NA,NA,minnesota,NA,2021,2021-07-31T00:00:00Z,benson,Agastache,foeniculum,BAFF349
+mlb-benson-31july21-affinis-03-leg,male,NA,NA,NA,NA,minnesota,NA,2021,2021-07-31T00:00:00Z,benson,Agastache,foeniculum,BAFF350
+mlb-benson-31july21-affinis-04-leg,male,NA,NA,NA,NA,minnesota,NA,2021,2021-07-31T00:00:00Z,benson,Agastache,foeniculum,BAFF351
+mlb-benson-31july21-affinis-05-leg,male,NA,NA,NA,NA,minnesota,NA,2021,2021-07-31T00:00:00Z,benson,Agastache,foeniculum,BAFF352
+mlb-benson-31july21-affinis-06-leg,male,NA,NA,NA,NA,minnesota,NA,2021,2021-07-31T00:00:00Z,benson,Agastache,foeniculum,BAFF353
+mlb-benson-31july21-affinis-07-leg,male,NA,NA,NA,NA,minnesota,NA,2021,2021-07-31T00:00:00Z,benson,Agastache,foeniculum,BAFF354
+mlb-benson-31july21-affinis-08-leg,male,NA,NA,NA,NA,minnesota,NA,2021,2021-07-31T00:00:00Z,benson,Agastache,foeniculum,BAFF355
+mlb-benson-31july21-affinis-09-leg,male,NA,NA,NA,NA,minnesota,NA,2021,2021-07-31T00:00:00Z,benson,Pycnanthemum,sp.,BAFF356
+mlb-phalen-01aug21-affinis-01-leg,male,NA,NA,NA,NA,minnesota,NA,2021,2021-08-01T00:00:00Z,phalen creek,Eurtrochium,purpureum,BAFF357
+mlb-phalen-01aug21-affinis-02-leg,male,NA,NA,NA,NA,minnesota,NA,2021,2021-08-01T00:00:00Z,phalen creek,Eurtrochium,purpureum,BAFF358
+mlb-phalen-01aug21-affinis-03-leg,male,NA,NA,NA,NA,minnesota,NA,2021,2021-08-01T00:00:00Z,phalen creek,Eurtrochium,purpureum,BAFF359
+mlb-phalen-01aug21-affinis-04-leg,male,NA,NA,NA,NA,minnesota,NA,2021,2021-08-01T00:00:00Z,phalen creek,Eurtrochium,purpureum,BAFF360
+mlb-troutbrook-18aug21-affinis-01-leg,female,NA,NA,NA,NA,minnesota,ramsey,2021,2021-08-18T00:00:00Z,troutbrook,Linaria,vulgaris,BAFF366
