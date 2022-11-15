@@ -22,7 +22,7 @@ library(naniar)
 
 # DATA --------------------------------------------------------------------
 
-df_meta <- readRDS("./data/data_output/df_rpbb_metadata_01a_output.R")
+df_meta <- readRDS("./data/data_output/output_01a_df_rpbb_metadata.Rdata")
 
 
 # VARIOUS NAME STANDARDIZATION --------------------------------------------
@@ -107,4 +107,4 @@ df_wrg_meta <- df_meta %>%
   separate(col = floral_host, into = c("fl_genus", "fl_species"), sep = " ", extra = "merge")
 
 
-saveRDS(df_wrg_meta, "./data/data_output/df_rpbb_metadata_01b_output.R")
+saveRDS(df_wrg_meta, "./data/data_output/output_01b_df_rpbb_metadata.Rdata")

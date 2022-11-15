@@ -1,0 +1,10 @@
+0.0 0.0 !Prob father and mother are in dataset
+0 0 !numbers of candidate males and females
+0 0 !Number of offspring with known father, exclusion threshold
+0 0 !Number of offspring with known mother, exclusion threshold
+0 !Number of known paternal sibships
+0 !Number of known maternal sibships
+0 !Number of offspring with known excluded fathers
+0 !Number of offspring with known excluded mothers
+0 !Number of offspring with known excluded paternal sibships
+0 !Number of offspring with known excluded maternal sibships

@@ -15,10 +15,19 @@ The workflow assumes you have...
 ## Various issues
 
 - Some metadata missing from Jay Watson (not critical)
+- `r emo::ji("warning")`There are several specimens from the MN Zoo with incorrect longitudes. They are -96deg but I believe they're simply just supposed to be -93. 
+    - Emailed Erik. For now, I changed all Camel Lot records to -93!
 - There are five specimens marked as NA for sex from Genevieve Pugesek. What to do with these?
     - From poking at their genotypes, they appear to be largely homozygous...it's possible they're males...but they are not completely homozygous...
     - `r emo::ji("warning")`Revisit `r emo::ji("warning")` For now, I have chosen to exclude them
-- `r emo::ji("warning")`A bunch of Michelle Boone's records lack lat-long values!`r emo::ji("warning")`
+- B126 was erroneously named BT126 in the error rate file from USDA (but named B126_1 and B126_2 in the columns of the genotype sheet). Ensure this switch (from BT126 -> B126) is the correct name rather than the other way around (i.e. BT126 being correct)
+- Would be nice if the names of the clusters meant something (so renaming them from current random numbers)
+- `r emo::ji("warning")``r emo::ji("warning")``r emo::ji("warning")`the output of COLONY is very suspect!!!  
+- `r emo::ji("warning")`currently trying 03a geneind object with and without removal of siblings...
+- `r emo::ji("warning")`Cluster number does not always match expected when 01d is loaded...this could just be due to filtering that occurs afterwards though (min loci, sex)
+- `r emo::ji("warning")``r emo::ji("warning")``r emo::ji("warning")`WHICH_NEST is not a reliable filter in 02a -- it contains some nests that are listed under column FROM_NEST as "nest" rather than yes/no/NA. FIX THIS! 
+
+
 
 
 ## Steps
@@ -35,9 +44,8 @@ d. Merge metadata with genotype data
 ### 02. Running COLONY and wrangling outputs
 
 a. Prepare COLONY input files
-b. Make DAT file for COLONY
-c. Run COLONY (done outside of R)
-d. Wrangle COLONY outputs
+b. Make DAT file for COLONY; Run COLONY (done outside of R on command line)
+c. Wrangle COLONY outputs
 
 
 ### 03. Running various population genetic analysis

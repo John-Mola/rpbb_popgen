@@ -37,7 +37,7 @@ library(plotly)
 
 # DATA --------------------------------------------------------------------
 
-df_meta <- readRDS("./data/data_output/df_rpbb_metadata_01b_output.R")
+df_meta <- readRDS("./data/data_output/output_01b_df_rpbb_metadata.Rdata")
 
 
 # CONVERT METADATA FRAME INTO A SPATIAL DATA FRAME ------------------------
@@ -68,14 +68,30 @@ mtx_distance <- st_distance(geo_meta, geo_meta)
 hc <- hclust(as.dist(mtx_distance), method="complete")
 
 # define the distance threshold, in this case 40 m
-d=20000
+d=10000
 
 # define clusters based on a tree "height" cutoff "d" and add them to the SpDataFrame
-geo_meta$clust <- cutree(hc, h=d)
+geo_meta$cluster <- cutree(hc, h=d)
 
 
 df_geo <-st_set_geometry(geo_meta, NULL) %>% 
-  inner_join(., df_meta)
+  inner_join(., df_meta) %>% 
+  group_by(cluster) %>% 
+  add_tally()
+
+df_geo_check <- df_geo %>% 
+  mutate(lonely = if_else(n < 3, "lonely", "grouped")) %>% 
+  filter(sex == "female")
+  
+
+# EXPORT RESULT -----------------------------------------------------------
+
+saveRDS(df_geo, "./data/data_output/output_01c_df_rpbb_clustered.Rdata")
+
+
+
+# CHECKING STUFF ----------------------------------------------------------
+
 
 
 df_affinis_historic <- read_csv("./data/data_raw/meta_rpbb_external/rpbb_historic_counties.csv")  %>% clean_names()
@@ -88,7 +104,7 @@ bg_map <- st_as_sf(map("state", regions = v_historic_states, plot = FALSE, fill 
 p_map <- ggplot() +
   geom_sf(data = bg_map, fill = "antiquewhite", alpha = 0.4, color = "grey80", size = 0.4) +
   #geom_sf(data = bg_map_extant, fill = "grey", alpha = 0.5, color = "grey80", size = 0.4, aes(text = ID)) +
-  geom_jitter(data = df_geo, aes(x = longitude, y = latitude, fill = clust), alpha = 0.5, color = "black", shape = 21, size = 2) +
+  geom_jitter(data = df_geo_check, aes(x = longitude, y = latitude, fill = cluster), alpha = 0.5, color = "black", shape = 21, size = 2) +
   # annotation_scale(location = "bl", width_hint = 0.4) +
   # annotation_north_arrow(location = "bl", which_north = "true",
   #                        pad_x = unit(0.1, "in"), pad_y = unit(0.3, "in"),
@@ -103,4 +119,4 @@ p_map <- ggplot() +
 
 ggplotly(p_map)
 
-df_geo %>% count(clust) %>% View
+df_geo %>% count(cluster) %>% View
