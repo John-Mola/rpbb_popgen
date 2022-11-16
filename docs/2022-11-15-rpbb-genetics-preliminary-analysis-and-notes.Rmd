@@ -1,0 +1,509 @@
+---
+title: "Working analysis of RPBB population genetics"
+subtitle: "Complete with notes, hangups, and issues. Hopes. Dreams. Fears."
+author: "Compiled by John M. Mola"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+
+```{r packages}
+
+#May be redundancy in here
+
+library(tidyverse)
+library(janitor)
+library(kableExtra)
+library(sf)
+library(maps)
+library(ggspatial)
+library(plotly)
+library(gghighlight)
+library(DT)
+# library(lubridate)
+library(adegenet)
+library(poppr)
+library(hierfstat)
+library(reshape2)
+# library(RColorBrewer)
+# library(scales)
+
+
+```
+
+```{r data}
+
+# Merged genotype and metadata generated in 01d
+
+df_rpbb_fulldata <- readRDS("../data/data_output/output_01d_merged_genotypes.Rdata") %>% mutate(cluster = paste0(state, " (",cluster,")"))
+
+#Error rate data of retained loci generated in 01d
+
+df_error_rates <- readRDS("../data/data_output/output_01d_error_rates.Rdata")
+
+# COLONY siblings data generated in 02c
+
+df_rpbb_colonizer <- read_csv("../analyses/outputs_colony/r_colonizer/rpbb_femalesNOknown_2022-11-14-colonizeR.csv") %>% mutate(cluster = paste0(state, " (",cluster,")"))
+
+# GENIND Object generated in 03a
+
+gen_rpbb <- readRDS("../analyses/analyses_output/03a_rpbb_femaleNOknown_allSibs_genind.Rdata")
+
+#Metadata; historic affinis states for mapping
+
+df_affinis_historic <- read_csv("../data/data_raw/meta_rpbb_external/rpbb_historic_counties.csv")  %>% clean_names()
+
+
+
+```
+
+---
+
+## Summary of work completed
+
+### Wrangling and data cleaning
+
+- Merged metadata sources from all field collections
+- Various cleaning and whatnot
+- **Spatial clustering of points to assign "populations"**
+- Merged clustered metadata with genotype data
+
+### COLONY/pedigree analysis
+
+- Prepared COLONY input data (see assumptions below)
+- **Ran COLONY for various datasets**
+- Wrangled and examined COLONY outputs
+  - `r emo::ji("warning")` There are issues!! `r emo::ji("warning")`
+  
+### Preliminary genetic analysis
+
+- Various quality checks and summary statistics
+- **"Toy" versions of popgen analysis like He/Ho and F-stats**
+  - `r emo::ji("warning")` There are issues!! `r emo::ji("warning")`
+
+---
+
+## Outstanding issues and points of confusion
+  
+- There are some minor issues of data availability that for now I have addressed by excluding specimens. Each of these issues is being resolved. 
+- **Need to determine best way of determining "populations"**
+  - For now, I'm using a clustering algorithm but it may not be the most informative
+  - Additionally, the clusters only have an index...so they should at least get semi-informative names (like "IA-SE" or something)
+  - For sake of argument in this document I have slapped the state onto the cluster index though this has the temporary unintended effect of messing up one of the WV/V clusters
+- **Need to make decisions about whether to include or exclude siblings from downstream analysis**
+- `r emo::ji("warning")` **COLONY output is not behaving as expected!!** `r emo::ji("warning")`
+  - This could be due to problems with low genetic diversity or inbreeding. Basically, it's assigning sibling groups that "cannot be" as they are hundreds of kilometers apart. 
+  - Possible solutions include tweaking input in some untried way (I have tried various), running COLONY only in batches by population/cluster (but this would require assuming all relationships w/in clusters are valid), or trying some other pedigree analysis pipeline
+  - Considering asking Jinliang Wang to consult
+  
+---
+
+## Next Steps
+
+- Resolve issues outlined above
+- Run "case study" COLONY analyses
+- Run COLONY on known nests
+- Run COLONY/other analyses with males
+  
+---  
+
+## Preliminary "Results"
+
+### Data Availability and Map of collections
+
+- Total specimens in USDA database: 665
+- Total specimens with ANY genetic data in USDA database: 498
+- Specimens after basic filtering: 465
+  - Had known lat-long, sex, and other basic metadata
+  - Was from 2020 or 2021
+  - Other minor filtering
+- Specimens used in COLONY: 307
+  - Females only
+  - Had at least 10 loci with data (vast majority have 13)
+  - Was NOT from a known colony (this removes quite a few specimens)
+- Specimens in pop-gen analyses: 307
+  - Same filters as COLONY
+  - `r emo::ji("warning")` Have not yet excluded siblings due to inconsistency with COLONY and because it's debatable if that's a wise step anyway
+
+
+```{r map of collections}
+
+
+
+v_historic_states <- df_affinis_historic %>% distinct(state) %>% pull(state)
+
+bg_map <- st_as_sf(map("state", regions = v_historic_states, plot = FALSE, fill = TRUE))
+
+#bg_map_extant <- st_as_sf(map("county", regions = v_extant_counties, plot = FALSE, fill = TRUE))
+
+#df_rpbb_county_summary <- df_meta_tarsi_cleannames %>% group_by(location_state, location_county) %>% summarise(total_collected = sum(number_collected), lat = mean(location_utm_lat), long = mean(location_utm_long))
+
+p_map <- ggplot() +
+  geom_sf(data = bg_map, fill = "antiquewhite", alpha = 0.4, color = "grey80", size = 0.4) +
+  #geom_sf(data = bg_map_extant, fill = "grey", alpha = 0.5, color = "grey80", size = 0.4, aes(text = ID)) +
+  geom_jitter(data = df_rpbb_fulldata, aes(x = longitude, y = latitude, fill = as.factor(cluster)), alpha = 0.5, size = 2) +
+  #stat_ellipse(data = df_rpbb_fulldata, aes(x=longitude, y=latitude,color=as.factor(cluster), group = as.factor(cluster)),type = "norm")+
+  #annotation_scale(location = "bl", width_hint = 0.4) +
+  # annotation_north_arrow(location = "bl", which_north = "true",
+  #                        pad_x = unit(0.1, "in"), pad_y = unit(0.3, "in"),
+  #                        style = north_arrow_fancy_orienteering) +
+  theme_bw() +
+  theme(panel.grid.major = element_line(color = gray(0.9),
+                                        linetype = "dashed",
+                                        size = 0.2),
+        panel.background = element_rect(fill = "white"),
+        legend.position = "right") +
+  labs(x = "", y = "", fill = "Cluster")
+
+ggplotly(p_map)
+
+
+# ggplot(mtcars, aes(x = cyl, y = mpg, color = as.factor(carb))) + 
+#   geom_point() + 
+#   gghighlight(carb == 2, use_direct_label = FALSE, unhighlighted_colour = NULL) +
+#   geom_point(pch=21, fill=NA, size=4, colour="black", stroke=0.5) 
+
+
+```
+
+**Figure 1.** Map showing the collection locations of 465 specimens available after basic initial filtering. Colors represent "population cluster" as assigned by tree method (tree length = 10km). **Hover over the dots to see what cluster they were assigned to!**
+
+### COLONY results and issues
+
+In this table you can see various issues like colony assignments across clusters (so really long distances) or years (so, siblings not possible). 
+
+```{r colony table}
+df_rpbb_colonizer %>% 
+  select(longname, year, site, cluster, loci_w_data, family_index, family_id) %>% 
+  datatable(colnames = c("Specimen Longname", "Year", "Site verbatim", "Pop Cluster", "No. Loci with Data", "Raw COLONY assignment", "COLONY assignment with singletons"), rownames = FALSE)
+
+```
+
+This table similarly shows how many colonies this is an issue for (singletons excluded)
+
+```{r colony summary table}
+df_rpbb_colonizer %>% 
+  filter(family_id != "s") %>% 
+  group_by(family_id) %>% 
+  summarise(which_clusters = toString(unique(cluster)),
+            n = str_count(which_clusters, pattern = ",")+1) %>% 
+  datatable(rownames = FALSE , colnames = c("COLONY Assignment", "Clusters colony detected within", "Number of clusters (anything >1 is improbable!)"))
+
+```
+
+## Preliminary genetic analysis
+
+### Assumptions
+
+Because the output of COLONY is so suspect at the time, I wanted to proceed without excluding siblings. There's debate as to whether or not this is "valid". The basic idea is you exclude siblings since they represent a biased subset of genetic variability...but if you're sampling randomly, and there's lot of siblings in the data, then it's possibly because there's not a lot of variability in the population so you should expect to encounter (and include) siblings a lot. 
+
+In any event, the following analysis is with the same specimens as the COLONY run: females, from unknown colonies, with at least 10 loci of data
+
+Maybe at this time this is more for "sake of argument" until we chase down the underlying issues with COLONY...or maybe this will help reveal why COLONY is struggling...
+
+### Quality checks and summary statistics
+
+#### Missing loci
+
+There are no loci with <80% completeness
+
+```{r qc loci missing}
+
+# FILTERING LOCI, GENOTYPES, INDIVIDUALS, ETC -----------------------------
+
+
+# MISSING LOCI
+
+
+locimiss_rpbb = propTyped(gen_rpbb, by = "loc")
+locimiss_rpbb[which(locimiss_rpbb < 0.80)] # print loci with < 80% complete genotypes
+
+# there are no loci with <80% completeness
+
+# # Barplot
+barplot(locimiss_rpbb, ylim = c(0,1), ylab = "Complete genotypes (proportion)", xlab = "Locus", las = 2, cex.names = 0.7)
+
+```
+
+#### Individuals with poor data
+
+There are no individuals with poor data in the dataset...but that is because I also excluded them earlier in the process. So this is just a sanity check. 
+
+```{r qc individuals data poor}
+
+# INDIVIDUALS WITH POOR DATA
+
+indmiss_rpbb <- propTyped(gen_rpbb, by = "ind")
+indmiss_rpbb[ which(indmiss_rpbb < 0.80) ] # print individuals with < 80% complete genotypes
+
+# remove individuals with less than 80% complete genotypes
+gen_rpbb_flt <- missingno(gen_rpbb, type = "geno", cutoff = 0.20) # this does nothing now because I filtered them in the COLONY run....
+```
+
+#### Duplicates or clones? 
+
+This suggests there might be a couple clones/duplicates in here. This is possible because of low genetic variability...or simply someone got double counted. Explore this more. The three that are clones are from adjacent values (e.g. BAFF429 and BAFF430) - so potential from cross contamination or simply just they were caught from the same population..
+
+```{r qc clone check}
+
+
+# CHECKING FOR DUPLICATES OR CLONES
+
+mlg(gen_rpbb_flt)
+
+# there are no dupes
+```
+
+#### Polymorphic
+
+Just a little sanity check that all the loci are polymorphic (they are)
+
+```{r qc polymorphic}
+
+
+
+# CHECK LOCI ARE STILL POLYMORPHIC
+
+isPoly(gen_rpbb_flt) %>% summary # they are all still polymorphic
+```
+
+### Summary Statistics
+
+```{r summary stats calc}
+
+
+# SUMMARY STATISTICS ------------------------------------------------------
+
+# NUMBER OF SAMPLES PER SITE
+
+v_rpbb_popN <- summary(gen_rpbb_flt$pop)
+
+df_rpbb_popN <- tibble::enframe(v_rpbb_popN) %>% rename(N = value)
+
+
+# PRIVATE ALLELES PER SITE
+
+v_rpbb_pa <- private_alleles(gen_rpbb_flt) %>% apply(MARGIN = 1, FUN = sum)
+
+
+# v_rpbb_popN <- summary(gen_rpbb_flt$pop)
+
+df_rpbb_pa <- tibble::enframe(v_rpbb_pa) %>% rename(PA = value)
+
+
+# ALLELIC RICHNESS PER SITE
+
+# allelic.richness(genind2hierfstat(gen_rpbb_flt))$Ar %>%
+#   apply(MARGIN = 2, FUN = mean) %>%
+#   round(digits = 3)
+
+v_rpbb_AR <- allelic.richness(genind2hierfstat(gen_rpbb_flt))$Ar %>%
+  apply(MARGIN = 2, FUN = mean) %>%
+  round(digits = 3)
+
+
+# v_rpbb_popN <- summary(gen_rpbb_flt$pop)
+
+df_rpbb_AR <- tibble::enframe(v_rpbb_AR) %>% rename(AR = value)
+
+
+```
+
+Table of various summary stats
+
+```{r summary stats display}
+
+df_sum_stats <- full_join(df_rpbb_popN, df_rpbb_pa) %>% full_join(., df_rpbb_AR)
+
+df_sum_stats %>%
+  arrange(desc(N)) %>%
+  datatable(rownames = FALSE,
+            colnames = c("Cluster", "No. Specimens", "Private Alleles", "Allelic Richness"))
+  
+
+```
+
+### Observed v. Expected Heterozygosity
+
+Only displaying populations with 5 or more specimens. 
+
+```{r heterozygosity, fig.width=10, fig.height=8}
+
+# HETEROZYGOSITY ----------------------------------------------------------
+
+# CALCULDATE BASIC STATS using hierfstat
+basic_rpbb <- basic.stats(gen_rpbb_flt, diploid = TRUE)
+
+# CALCULATE OBSERVED HETEROZYGOSITY
+
+Ho_rpbb <- apply(basic_rpbb$Ho, MARGIN = 2, FUN = mean, na.rm = TRUE) %>%
+  round(digits = 2)
+#Ho_rpbb
+
+# CALCULATE EXPECTED HETEROZYGOSITY
+
+He_rpbb <- apply(basic_rpbb$Hs, MARGIN = 2, FUN = mean, na.rm = TRUE) %>%
+  round(digits = 2)
+#He_rpbb
+
+# CREATE DATAFRAME OF OBSERVED AND EXPECTED HET
+
+df_het_rpbb <- data.frame(Site = names(Ho_rpbb), Ho = Ho_rpbb, He = He_rpbb) %>%
+  melt(id.vars = "Site") %>%
+  full_join(., df_rpbb_popN, by = c("Site" = "name"))
+
+# Italic label
+hetlab.o = expression(italic("H")[o])
+hetlab.e = expression(italic("H")[e])
+
+ggplot(data = filter(df_het_rpbb, N >= 5), aes(x = reorder(Site, -N), y = value, fill = variable))+
+  geom_bar(stat = "identity", position = position_dodge(), colour = "black")+
+  geom_text(aes(y = 0.9, label = N)) +
+  # scale_y_continuous(expand = c(0,0), limits = c(0,0.50))+
+  scale_fill_manual(values = c("royalblue", "#bdbdbd"), labels = c(hetlab.o, hetlab.e))+
+  labs(x = "Region", y = "Heterozygosity") +
+  theme_classic(base_size = 15) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+**Figure 2.** Observed (blue) versus expected (grey) heterozygosity across the regions. Numbers above bars are the sample size for each region.
+
+
+Same (except ALL clusters, not just those with >=5 specimens) as figure but in table format for investigating to your heart's content. Added some math for a little helper.  
+
+```{r table of observed v het}
+
+df_het_rpbb %>% 
+  pivot_wider(names_from = variable, values_from = value) %>% 
+  arrange(desc(N)) %>% 
+  mutate(diff_H = round(He - Ho,3)) %>% 
+  datatable(rownames = FALSE,
+            colnames = c("Cluster", "No. Specimens", "Ho", "He", "He - Ho"))
+
+```
+
+
+### F-Statistics
+
+This is just kinda trash for now. Need to determine how we really wanna cluster things. This results in way too many clusters to be intelligible so I haven't really worked with getting it clean. 
+
+Below is with only populations having >=5 specimens
+```{r, cache=TRUE, fig.height = 10, fig.width = 10}
+
+# F STATISTICS -----------------------------------------------------------
+
+
+# Fis PER SITE
+
+fis_rpbb <- apply(basic_rpbb$Fis, MARGIN = 2, FUN = mean, na.rm = TRUE) %>%
+  round(digits = 3)
+
+ # Subset data sets to reduce computation time
+
+#find clusters with >=5 specimens
+v_big_pops <- df_rpbb_colonizer %>% group_by(cluster) %>% tally() %>% filter(n>=5) %>% pull(cluster)
+
+gen_rpbb_flt2 = popsub(gen_rpbb_flt, sublist = v_big_pops)
+
+## Ale Ber Brd Pad 
+
+# Pairwise Fst
+
+fst_rpbb = genet.dist(gen_rpbb_flt2, method = "WC84")
+# fst_rpbb %>% round(digits = 3)
+
+# this plot kinda janky below
+
+
+# Convert dist object to data.frame
+fst.matrix = as.matrix(fst_rpbb)
+ind = which( lower.tri(fst.matrix, diag = FALSE), arr.ind = TRUE)
+fst.df = data.frame(Site1 = dimnames(fst.matrix)[[2]][ind[,2]],
+                    Site2 = dimnames(fst.matrix)[[1]][ind[,1]],
+                    Fst = fst.matrix[ ind ] %>% round(digits = 3))
+
+# Get upper triangle of the correlation matrix
+  get_upper_tri <- function(cormat){
+    cormat[lower.tri(cormat)]<- NA
+    return(cormat)
+  }
+
+
+upper_tri <- get_upper_tri(fst.matrix)
+
+# Melt the correlation matrix
+library(reshape2)
+melted_cormat <- melt(upper_tri, na.rm = TRUE)
+
+  # Convert minus values to zero
+melted_cormat$value[melted_cormat$value < 0] = 0
+
+# melted_cormat2 <- melted_cormat %>%
+#   filter(Var1 != Var2)
+
+melted_cormat2 <- melted_cormat %>%
+  mutate(value = ifelse(Var1 != Var2, value, NA))
+
+# Fst italic label
+fst.label = expression(italic("F")[ST])
+
+# Extract middle Fst value for gradient argument
+mid = max(melted_cormat2$value, na.rm = TRUE) / 2
+
+# # Heatmap
+
+ggplot(data = melted_cormat2, aes(Var2, Var1, fill = value))+
+ geom_tile(color = "white")+
+ scale_fill_gradient2(low = "black", mid = "grey", high = "#EEAD0E", midpoint = mid, name = fst.label, limits = c(0, max(melted_cormat2$value)), na.value = NA) +
+  theme_minimal(base_size = 15)+ 
+ theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+    size = 12, hjust = 1))+
+ coord_fixed() +
+  labs(x = "", y = "")
+
+#
+# ggplot(data = melted_cormat2, aes(Var2, Var1, fill = value))+
+#  geom_tile(color = "white")+
+#  scale_fill_gradient2(low = "blue", mid = "pink", high = "red", midpoint = mid, name = fst.label, limits = c(0, max(melted_cormat2$value)), breaks = c(0, 0.05, 0.10, 0.15, 0.20), na.value = NA) +
+#   theme_minimal()+
+#  theme(axis.text.x = element_text(angle = 45, vjust = 1,
+#     size = 12, hjust = 1))+
+#  coord_fixed() +
+#   labs(x = "", y = "")
+
+
+#   # Convert minus values to zero
+# fst.df$Fst[fst.df$Fst < 0] = 0
+# 
+# # Fst italic label
+# fst.label = expression(italic("F")[ST])
+# 
+# # Extract middle Fst value for gradient argument
+# mid = max(fst.df$Fst) / 2
+# 
+# # Plot heatmap
+# ggplot(data = fst.df, aes(x = Site1, y = Site2, fill = Fst))+
+#   geom_tile(colour = "black")+
+#   geom_text(aes(label = Fst), color="black", size = 3)+
+#   scale_fill_gradient2(low = "blue", mid = "pink", high = "red", midpoint = mid, name = fst.label, limits = c(0, max(fst.df$Fst)), breaks = c(0, 0.05, 0.10))+
+#   scale_x_discrete(expand = c(0,0))+
+#   scale_y_discrete(expand = c(0,0), position = "right")+
+#   theme(axis.text = element_text(colour = "black", size = 10, face = "bold"),
+#         axis.title = element_blank(),
+#         panel.grid = element_blank(),
+#         panel.background = element_blank(),
+#         legend.position = "right",
+#         legend.title = element_text(size = 14, face = "bold"),
+#         legend.text = element_text(size = 10)
+#   )
+
+
+
+```
+
+
+

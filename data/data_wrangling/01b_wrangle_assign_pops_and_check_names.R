@@ -104,7 +104,16 @@ df_wrg_meta <- df_meta %>%
     floral_host == "in flight" ~ NA_character_,
     TRUE ~ floral_host
   )) %>% 
-  separate(col = floral_host, into = c("fl_genus", "fl_species"), sep = " ", extra = "merge")
+  separate(col = floral_host, into = c("fl_genus", "fl_species"), sep = " ", extra = "merge") %>% 
+  #There's an issue with some of the specimens from known colonies not being labeled properly. Fixing that here (hopefully)
+  mutate(from_nest = if_else(from_nest %in% c("nest", "yes"), "yes", NA_character_),
+         from_nest = if_else(site == "nest", "yes", from_nest),
+         which_nest = case_when(
+           is.na(from_nest) ~ NA_character_,
+           from_nest == "yes" ~ site))
+  
 
 
 saveRDS(df_wrg_meta, "./data/data_output/output_01b_df_rpbb_metadata.Rdata")
+
+

@@ -31,13 +31,12 @@ df_rpbb_fulldata <- readRDS("./data/data_output/output_01d_merged_genotypes.Rdat
          sex == "female",
          #NOTE excluding individuals from known nests! I believe this helps COLONY's assumptions
          #!!!!!WHICHNEST IS NOT A RELIABLE FILTER!!!!!
-         is.na(which_nest),
-         n > 4)
+         is.na(which_nest)) %>% mutate(cluster = paste0(state, " (",cluster,")"))
 
 
 # post-COLONY siblings data
 
-df_rpbb_colonizer <- read_csv("./analyses/outputs_colony/r_colonizer/rpbb_femalesNOknown_2022-11-14-colonizeR.csv")
+df_rpbb_colonizer <- read_csv("./analyses/outputs_colony/r_colonizer/rpbb_femalesNOknown_2022-11-14-colonizeR.csv") %>% mutate(cluster = paste0(state, " (",cluster,")"))
 
 v_rpbb_keepers <- readRDS("./analyses/outputs_colony/r_colonizer/02c_v_rpbb_keepers.Rdata")
 
@@ -84,6 +83,11 @@ df_rpbb_alleles <- as.data.frame(df_rpbb_mergeGenos) %>%
 #NOTE - one weird thing here is that there's 97 individuals in the Minneapolis region...also, no sibs are removed (yet...)
 gen_rpbb = df2genind(df_rpbb_alleles, ploidy = 2, ind.names = v_rpbb_shortnames, pop = v_rpbb_sites, sep = ",")
 
+
+
+# SAVE GENEIND OBJECT -----------------------------------------------------
+
+saveRDS(gen_rpbb, "./analyses/analyses_output/03a_rpbb_femaleNOknown_allSibs_genind.Rdata")
 
 
 

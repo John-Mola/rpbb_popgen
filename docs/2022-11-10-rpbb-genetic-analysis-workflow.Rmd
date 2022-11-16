@@ -26,6 +26,11 @@ The workflow assumes you have...
 - `r emo::ji("warning")`currently trying 03a geneind object with and without removal of siblings...
 - `r emo::ji("warning")`Cluster number does not always match expected when 01d is loaded...this could just be due to filtering that occurs afterwards though (min loci, sex)
 - `r emo::ji("warning")``r emo::ji("warning")``r emo::ji("warning")`WHICH_NEST is not a reliable filter in 02a -- it contains some nests that are listed under column FROM_NEST as "nest" rather than yes/no/NA. FIX THIS! 
+- `r emo::ji("warning")` Check for HWE and LD among markers...maybe this will help with COLONY?
+
+
+#TODO - Check for HWE
+#TODO - Check for LD
 
 
 

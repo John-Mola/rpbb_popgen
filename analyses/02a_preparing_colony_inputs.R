@@ -45,7 +45,7 @@ df_rpbb_female_geno <- df_rpbb_fulldata %>%
   mutate(across(v_loci_kept, ~replace_na(.x, 0)))
 
 
-write_tsv(df_rpbb_female_geno, file = "./data/data_output/output_02a_rpbb_female_geno.txt", col_names = FALSE)
+write_tsv(df_rpbb_female_geno, file = "./analyses/inputs_colony/geno_files/output_02a_rpbb_female_geno.txt", col_names = FALSE)
 
 
 
@@ -62,7 +62,7 @@ df_rpbb_err <- df_error_rates %>%
   # replace NAs with 0s to satisfy COLONY criteria
   replace(is.na(.), 0)
 
-write_tsv(df_rpbb_err, file = "./data/data_output/output_02a_rpbb_err.txt", col_names = TRUE)
+write_tsv(df_rpbb_err, file = "./analyses/inputs_colony/err_files/output_02a_rpbb_err.txt", col_names = TRUE)
 
 
 

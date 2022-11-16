@@ -15,7 +15,7 @@ library(janitor)
 # DATA --------------------------------------------------------------------
 
 # BestCluster from COLONY; for the run using ONLY females EXCLUDING known colonies
-df_bc <- read_table(file = "./analyses/outputs_colony/rpbb_femalesNOknown/rpbb_femalesNOknown_2022-11-14.BestCluster", col_names = TRUE) %>% clean_names()
+df_bc <- read_table(file = "./analyses/outputs_colony/rpbb_femalesNOknown/rpbb_femalesNOknown.BestCluster", col_names = TRUE) %>% clean_names()
 
 # Metadata from the 01d step; we may need the genotype data when loading into future steps, so keep it all connected
 df_md <- readRDS("data/data_output/output_01d_merged_genotypes.Rdata")
