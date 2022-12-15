@@ -9,24 +9,6 @@
 # Some metadata from 2020 were cleaned using a manual step due to confusion arising from collecting data from several collaborators during a global pandemic...
 # Field data from my own collections were also cleaned in a separate step in a prior database. Should the need arise, this file can be provided (but is somewhat unnecessary as we don't have that same cleaning file for other collaborators who submitted data and used a mix of hand and automated cleaning methods)
 
-# Initial tasks
-
-# DONE - which metadata do we want? From USDA or from collectors? What is missing (if anything relevant) from USDA?
-#### --> basically only need caste, whether or not it's from a nest, and floral associations. Everything else is redundant. So let's go with whatever the USDA sheet says for all of that.
-
-# Quality checks
-
-# TODO - confirm missing specimens with Jay Watson
-# TODO - clean up this document
-
-# Things to do in the next step 01b
-
-# TODO - ensure specimens have real lat-long and not obscured, if obscured get real and merge
-# TODO merge with genotype data
-# TODO create a "number of loci" column
-# TODO - assign all specimens to consistent site names
-# TODO group nearby specimens into "populations"...
-
 
 # PACKAGES ----------------------------------------------------------------
 
@@ -224,7 +206,35 @@ df_meta_merged_corrected <- full_join(df_meta_merged, df_missing_ll, by = c("lon
   filter(!is.na(internal_barcode))
 
 
-saveRDS(df_meta_merged_corrected, file = "./data/data_output/output_01a_df_rpbb_metadata.Rdata")
+# adding some missing samples due to weird shipping dates -----------------
+
+# there are some samples that arrived late, so they ended up getting dropped despite being relevant. They ended up in a weird purgatory. They were genotyped with 2021, despite being collected in 2020. Adding them back in in a kind of janky way...oh well. 
+
+df_antijoin_2020 <- df_raw_USDA_meta %>% mutate(year = year(caught_dd_mmm_yyyy)) %>% filter(year == 2020) %>% anti_join(., df_2020_meta, by = c("sample_tube_id_with_description" = "longname")) %>% filter(shipper !=  "Ben Sadd") %>% 
+  #need to make sure their column names match and all relevant metadata is filled in
+  dplyr::select(sample_tube_id_with_description, male_m_female_f_unk, state, county, year, caught_dd_mmm_yyyy, site_description_name, internal_barcode, latitude, longitude) %>% 
+  rename(longname = sample_tube_id_with_description,
+         sex = male_m_female_f_unk,
+         date = caught_dd_mmm_yyyy,
+         site = site_description_name) %>% 
+  filter(internal_barcode != "BAFF047") %>% 
+  mutate(from_nest = c("yes", NA_character_, "yes", "yes", NA_character_),
+         which_nest = c("Hixon", NA_character_, "Menomonee", "Menomonee", NA_character_),
+         floral_host = NA_character_) %>% 
+  dplyr::select(longname, sex, from_nest, which_nest, state, county, year, date, site, floral_host, internal_barcode, latitude, longitude) %>% 
+  mutate(latitude = as.numeric(latitude),
+         longitude = as.numeric(longitude))
+
+
+# ADD THE ADDED SPECIMENS TO THE PREVIOUS DF ------------------------------
+
+df_meta_merged_corrected_concat <- bind_rows(df_meta_merged_corrected, df_antijoin_2020)
+
+# SAVE THIS MADNESS -------------------------------------------------------
+
+
+
+saveRDS(df_meta_merged_corrected_concat, file = "./data/data_output/output_01a_df_rpbb_metadata.Rdata")
 
 # SOME QUALITY CHECKS -----------------------------------------------------
 
@@ -244,6 +254,8 @@ saveRDS(df_meta_merged_corrected, file = "./data/data_output/output_01a_df_rpbb_
 # ok ...now we "only" have 10 missing...4 missing ones are the duplicates that was intentionally removed. So there are 6 that I dunno why they're missing. All from Elaine (1) and Jay (5)
 
 # can simply pull the Elaine and Jay ones from here over into the merged metadata. The Kochanski ones that are duplicated will need to be dropped completely unless there's a way of separating them out/determining true information for each. Might also need the non-obscured locations.
+
+#update -- as of 2022-12-15 i have resolved all of the missing ones. They are either folded in or "intentionally" missing
 
 
 

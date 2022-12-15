@@ -93,30 +93,30 @@ saveRDS(df_geo, "./data/data_output/output_01c_df_rpbb_clustered.Rdata")
 # CHECKING STUFF ----------------------------------------------------------
 
 
-
-df_affinis_historic <- read_csv("./data/data_raw/meta_rpbb_external/rpbb_historic_counties.csv")  %>% clean_names()
-
-
-v_historic_states <- df_affinis_historic %>% distinct(state) %>% pull(state)
-
-bg_map <- st_as_sf(map("state", regions = v_historic_states, plot = FALSE, fill = TRUE))
-
-p_map <- ggplot() +
-  geom_sf(data = bg_map, fill = "antiquewhite", alpha = 0.4, color = "grey80", size = 0.4) +
-  #geom_sf(data = bg_map_extant, fill = "grey", alpha = 0.5, color = "grey80", size = 0.4, aes(text = ID)) +
-  geom_jitter(data = df_geo_check, aes(x = longitude, y = latitude, fill = cluster), alpha = 0.5, color = "black", shape = 21, size = 2) +
-  # annotation_scale(location = "bl", width_hint = 0.4) +
-  # annotation_north_arrow(location = "bl", which_north = "true",
-  #                        pad_x = unit(0.1, "in"), pad_y = unit(0.3, "in"),
-  #                        style = north_arrow_fancy_orienteering) +
-  theme_bw() +
-  theme(panel.grid.major = element_line(color = gray(0.9),
-                                        linetype = "dashed",
-                                        size = 0.2),
-        panel.background = element_rect(fill = "white"),
-        legend.position = "right")
-  # labs(x = "", y = "", fill = "Region")
-
-ggplotly(p_map)
-
-df_geo %>% count(cluster) %>% View
+# 
+# df_affinis_historic <- read_csv("./data/data_raw/meta_rpbb_external/rpbb_historic_counties.csv")  %>% clean_names()
+# 
+# 
+# v_historic_states <- df_affinis_historic %>% distinct(state) %>% pull(state)
+# 
+# bg_map <- st_as_sf(map("state", regions = v_historic_states, plot = FALSE, fill = TRUE))
+# 
+# p_map <- ggplot() +
+#   geom_sf(data = bg_map, fill = "antiquewhite", alpha = 0.4, color = "grey80", size = 0.4) +
+#   #geom_sf(data = bg_map_extant, fill = "grey", alpha = 0.5, color = "grey80", size = 0.4, aes(text = ID)) +
+#   geom_jitter(data = df_geo_check, aes(x = longitude, y = latitude, fill = cluster), alpha = 0.5, color = "black", shape = 21, size = 2) +
+#   # annotation_scale(location = "bl", width_hint = 0.4) +
+#   # annotation_north_arrow(location = "bl", which_north = "true",
+#   #                        pad_x = unit(0.1, "in"), pad_y = unit(0.3, "in"),
+#   #                        style = north_arrow_fancy_orienteering) +
+#   theme_bw() +
+#   theme(panel.grid.major = element_line(color = gray(0.9),
+#                                         linetype = "dashed",
+#                                         size = 0.2),
+#         panel.background = element_rect(fill = "white"),
+#         legend.position = "right")
+#   # labs(x = "", y = "", fill = "Region")
+# 
+# ggplotly(p_map)
+# 
+# df_geo %>% count(cluster) %>% View

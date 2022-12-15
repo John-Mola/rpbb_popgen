@@ -48,6 +48,75 @@ df_rpbb_female_geno <- df_rpbb_fulldata %>%
 write_tsv(df_rpbb_female_geno, file = "./analyses/inputs_colony/geno_files/output_02a_rpbb_female_geno.txt", col_names = FALSE)
 
 
+# MN ZOO 2020 ONLY --------------------------------------------------------
+
+# Filter to only MN Zoo specimens in 2020, then do rest
+
+# filter out individuals with less than 10 markers, select only the shortname and loci, convert NAs to 0, drop column names
+
+df_rpbb_mnz_2020 <- df_rpbb_fulldata %>% 
+  # site specific filters
+  filter(str_detect(site, pattern = "Zoo"),
+         year == 2020) %>% 
+  # general filters (copied from above)
+  filter(loci_w_data >= 10,
+         #NOTE that this is ONLY females in this dataset now!!
+         sex == "female",
+         #NOTE excluding individuals from known nests! I believe this helps COLONY's assumptions
+         is.na(which_nest)) %>% 
+  dplyr::select(internal_barcode, all_of(v_loci_kept)) %>% 
+  mutate(across(v_loci_kept, ~replace_na(.x, 0)))
+
+
+write_tsv(df_rpbb_mnz_2020, file = "./analyses/inputs_colony/geno_files/output_02a_rpbb_mnz_2020.txt", col_names = FALSE)
+
+
+# MN ZOO 2021 ONLY --------------------------------------------------------
+
+# Filter to only MN Zoo specimens in 2021, then do rest
+
+# filter out individuals with less than 10 markers, select only the shortname and loci, convert NAs to 0, drop column names
+
+df_rpbb_mnz_2021 <- df_rpbb_fulldata %>% 
+  # site specific filters
+  filter(str_detect(site, pattern = "Zoo"),
+         year == 2021) %>% 
+  # general filters (copied from above)
+  filter(loci_w_data >= 10,
+         #NOTE that this is ONLY females in this dataset now!!
+         sex == "female",
+         #NOTE excluding individuals from known nests! I believe this helps COLONY's assumptions
+         is.na(which_nest)) %>% 
+  dplyr::select(internal_barcode, all_of(v_loci_kept)) %>% 
+  mutate(across(v_loci_kept, ~replace_na(.x, 0)))
+
+
+write_tsv(df_rpbb_mnz_2021, file = "./analyses/inputs_colony/geno_files/output_02a_rpbb_mnz_2021.txt", col_names = FALSE)
+
+
+# TURTLE VALLEY ONLY ------------------------------------------------------
+
+# Filter to only turtle valley, then do rest
+
+# filter out individuals with less than 10 markers, select only the shortname and loci, convert NAs to 0, drop column names
+
+df_rpbb_turtle_2021 <- df_rpbb_fulldata %>% 
+  # site specific filters
+  filter(str_detect(site, pattern = "Turtle"),
+         year == 2021) %>% 
+  # general filters (copied from above)
+  filter(loci_w_data >= 10,
+         #NOTE that this is ONLY females in this dataset now!!
+         sex == "female",
+         #NOTE excluding individuals from known nests! I believe this helps COLONY's assumptions
+         is.na(which_nest)) %>% 
+  dplyr::select(internal_barcode, all_of(v_loci_kept)) %>% 
+  mutate(across(v_loci_kept, ~replace_na(.x, 0)))
+
+
+write_tsv(df_rpbb_turtle_2021, file = "./analyses/inputs_colony/geno_files/output_02a_rpbb_turtle_2021.txt", col_names = FALSE)
+
+
 
 # WRANGLING ERROR RATE FILE -----------------------------------------------
 
