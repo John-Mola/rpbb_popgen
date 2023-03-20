@@ -3,6 +3,10 @@
         {
             "columnIndex": 2,
             "ascending": true
+        },
+        {
+            "columnIndex": 4,
+            "ascending": false
         }
     ],
     "path": "~/Library/CloudStorage/GoogleDrive-johnmmola@gmail.com/My Drive/Work/Colorado State University/Projects/rpbb_popgen/analyses"

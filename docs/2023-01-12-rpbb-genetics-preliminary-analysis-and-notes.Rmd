@@ -1,0 +1,788 @@
+---
+title: "Working analysis of RPBB population genetics"
+subtitle: "Complete with notes, hangups, and issues. Hopes. Dreams. Fears."
+author: "Compiled by John M. Mola"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+
+```{r packages}
+
+#May be redundancy in here
+
+library(tidyverse)
+library(janitor)
+library(kableExtra)
+library(sf)
+library(maps)
+library(ggspatial)
+library(plotly)
+library(gghighlight)
+library(DT)
+# library(lubridate)
+library(adegenet)
+library(poppr)
+library(hierfstat)
+library(reshape2)
+# library(RColorBrewer)
+# library(scales)
+library(readxl)
+library(pegas)
+library(lattice)
+library(PopGenReport)
+
+
+```
+
+```{r data}
+
+# USDA database
+
+df_raw_USDA <- read_excel("../data/data_raw/Bombus_affinis_repository__msatdata_ver_22September2022.xlsx", sheet = 2) %>% clean_names()
+
+
+# Merged genotype and metadata generated in 01d
+
+df_rpbb_fulldata <- readRDS("../data/data_output/output_01d_merged_genotypes.Rdata")
+
+#Error rate data of retained loci generated in 01d
+
+df_error_rates <- readRDS("../data/data_output/output_01d_error_rates.Rdata")
+
+# COLONY siblings data generated in 02c01 - this is "batched" at the level of 100km clusters, so it's fairly crude clustering
+
+df_rpbb_colonizer <- read_csv("../analyses/outputs_colony/r_colonizer/rpbb_batch_colonizeR.csv")
+
+# GENIND Object generated in 03a; this actually should contain filtered siblings now so it's a misnomer; check and correct
+
+gen_rpbb <- readRDS("../analyses/analyses_output/03a_rpbb_femaleNOknown_NOSibs_genind.Rdata")
+
+#Metadata; historic affinis states for mapping
+
+df_affinis_historic <- read_csv("../data/data_raw/meta_rpbb_external/rpbb_historic_counties.csv")  %>% clean_names()
+
+# Pairwise distances between sites
+
+df_joined_clusters <- readRDS("../data/data_output/output_01c_df_cluster100_pw_distances.Rdata")
+
+```
+
+
+---
+
+## Summary of work completed
+
+### Wrangling and data cleaning
+
+- Merged metadata sources from all field collections
+- Various cleaning and whatnot
+- **Spatial clustering of points to assign "populations"**
+    - For now, all analyses are done at a 100km spatial clustering. This is very crude, but easy to understand and work with. Likely, we'll want to change this to a closer buffer range (like 20km)
+- Merged clustered metadata with genotype data
+
+### COLONY/pedigree analysis
+
+- Prepared COLONY input data
+- Ran COLONY for each 100km cluster, separated by year (i.e. excluded "impossible" relationships, made COLONY run smooth that way!)
+- Wrangled COLONY outputs and merged it back to the genotype data  
+    - Although colonies are assigned at the 100km cluster, they can easily be examined at smaller spatial scales (e.g. filter dataset to only look at MN Zoo even though that's clustered with Twin Cities generally. Then can examine # of unique colonies at the zoo, etc)
+    - A quick check with the MN Zoo shows that this works (there are not families detected outside of expected distances)
+
+### Preliminary genetic analysis
+
+- Various quality checks and summary statistics
+- Preliminary versions of Fst, He, Ho, PAR  
+    - Beginning some of these as a function of pairwise distance, longitude, etc. 
+    - Again, doing this at the 100km cluster level which is crude but easy to communicate/aligns clearly with COLONY input
+
+---
+
+## Outstanding issues and points of confusion
+  
+
+- **Need to determine best way of determining "populations"**
+  - For now, I'm using a clustering algorithm but it may not be the most informative
+- **Need to make decisions about whether to include or exclude siblings from downstream analysis**  
+  - For now, I am excluding them, but this is not necessarily necessary as there are various opinions on this...but path of least resistance is probably exclude them...could do both and see if output is substantially different
+
+  
+---
+
+## Next Steps
+
+- Make COLONY summary for all sites  
+  - \# of individual, \# genotyped, \# unique colonies
+  - For sites with >10 genotyped, calculate ML Colony number and then proportion detected
+  - "Site" in this case needs to be defined...could use the 5km cluster assuming it doesn't result in weird splitting in unexpected ways
+- Do diploid male count
+  - For now, just assume >2 heterozygous loci as this aligns with Jha...but look into the more "liberal" approach used in that recent paper
+- Population Genetics analyses  
+  - Fst ~ Distance (already done)
+  - He and AD ~ latitude, region, mgmt unit or whatever  
+    - There are versions of this where it's modeled as He ~ region + (1|locus) for example...determine why and if necessary and then do
+  - STRUCTURE (do later, need to learn more)
+  - AMOVA (not exactly sure why people do this, so learn more about it)
+
+---  
+
+## Preliminary Results
+
+### Data Availability and Map of collections
+
+
+
+```{r summary of data availability}
+
+#total specimens in USDA database
+n_total_specimens <- nrow(df_raw_USDA)
+
+#total specimens with ANY genetic data
+n_total_genotyped <- nrow(filter(df_raw_USDA, !is.na(name_3)))
+
+#specimens after filtering for lat-long, sex, and other complete metadata; from 2020 or 2021; other quality control (>10 valid loci?)
+n_filtered <- nrow(df_rpbb_fulldata)
+
+# specimens used in COLONY; females, had at least 10 loci with data, was NOT from a known nest
+n_colony <- nrow(df_rpbb_colonizer)
+
+#specimens in pop-gen analyses; same as COLONY filters plus only 1 sibling per detected colony
+n_popgen <- nInd(gen_rpbb)
+
+# df_sample_counts <- tibble(dataset = c("Total Specimens", "Genotyped Specimens", "Filtered Specimens", "Used in COLONY", "Used in PopGen Analysis"), samplesize = c(n_total_specimens, n_total_genotyped, n_filtered, n_colony, n_popgen))
+# 
+# df_sample_counts %>% 
+#   kable()
+
+n_males <- nrow(filter(df_rpbb_fulldata, sex == "male"))
+
+```
+
+- Total specimens in USDA database: **`r n_total_specimens`**
+- Total specimens with ANY genetic data in USDA database: **`r n_total_genotyped`**
+- Specimens after basic filtering: **`r n_filtered`**
+  - Had known lat-long, sex, and other basic metadata
+  - Was from 2020 or 2021
+  - Other minor filtering
+- Specimens used in COLONY: **`r n_colony`**
+  - Females only
+  - Had at least 10 loci with data (vast majority have 13)
+  - Was NOT from a known colony (this removes quite a few specimens)
+- Specimens in pop-gen analyses: **`r n_popgen`**
+  - Same filters as COLONY and  
+  - Only one individual per detected colony
+- Number of males: **`r n_males`**
+
+
+```{r map of collections, fig.height = 8, fig.width = 10}
+
+
+
+v_historic_states <- df_affinis_historic %>% distinct(state) %>% pull(state)
+
+bg_map <- st_as_sf(map("state", regions = v_historic_states, plot = FALSE, fill = TRUE))
+
+#bg_map_extant <- st_as_sf(map("county", regions = v_extant_counties, plot = FALSE, fill = TRUE))
+
+#df_rpbb_county_summary <- df_meta_tarsi_cleannames %>% group_by(location_state, location_county) %>% summarise(total_collected = sum(number_collected), lat = mean(location_utm_lat), long = mean(location_utm_long))
+
+p_map <- ggplot() +
+  geom_sf(data = bg_map, fill = "antiquewhite", alpha = 0.4, color = "grey80", size = 0.4) +
+  #geom_sf(data = bg_map_extant, fill = "grey", alpha = 0.5, color = "grey80", size = 0.4, aes(text = ID)) +
+  geom_point(data = df_rpbb_fulldata, aes(x = longitude, y = latitude, fill = as.factor(named_cluster100)), alpha = 0.5, size = 3) +
+  #stat_ellipse(data = df_rpbb_fulldata, aes(x=longitude, y=latitude,color=as.factor(cluster), group = as.factor(cluster)),type = "norm")+
+  #annotation_scale(location = "bl", width_hint = 0.4) +
+  # annotation_north_arrow(location = "bl", which_north = "true",
+  #                        pad_x = unit(0.1, "in"), pad_y = unit(0.3, "in"),
+  #                        style = north_arrow_fancy_orienteering) +
+  theme_bw(base_family = 20) +
+  theme(panel.grid.major = element_line(color = gray(0.9),
+                                        linetype = "dashed",
+                                        size = 0.2),
+        panel.background = element_rect(fill = "white"),
+        legend.position = "right",
+        legend.text = element_text(size = 18),
+        axis.text = element_text(size = 18),
+        axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(x = "", y = "", fill = "Cluster")
+
+ggplotly(p_map)
+
+# p_map
+
+# ggplot(mtcars, aes(x = cyl, y = mpg, color = as.factor(carb))) + 
+#   geom_point() + 
+#   gghighlight(carb == 2, use_direct_label = FALSE, unhighlighted_colour = NULL) +
+#   geom_point(pch=21, fill=NA, size=4, colour="black", stroke=0.5) 
+
+
+```
+
+**Figure 1.** Map showing the collection locations of 470 specimens available after basic initial filtering. Colors represent "population cluster" as assigned by tree method (used `hclust` and `cutree`; tree length = 100km). **Hover over the dots to see what cluster they were assigned to!**
+
+
+## Quality checks and summary statistics
+
+#### HW Equilibrium
+
+See Shalene's paper on page 998 for inspiration on how to deal with this...Jha et al. 2015 Contemporary human-altered landscapes and oceanic barriers reduce bumble bee gene flow
+
+```{r hw test}
+
+hw.test(gen_rpbb, B=1000)
+
+rpbbhwe.pop <- seppop(gen_rpbb) %>% lapply(hw.test, B = 0)
+rpbbhwe.mat <- sapply(rpbbhwe.pop, "[", i = TRUE, j = 3) # Take the third column with all rows
+alpha  <- 0.05
+newmat <- rpbbhwe.mat
+newmat[newmat > alpha] <- 1
+levelplot(t(newmat), scales=list(x=list(rot=45)))
+
+```
+
+
+```{r hw test corrected, eval=FALSE}
+#correcting for multiple tests using this tutorial: https://bookdown.org/hhwagner1/LandGenCourse_book/WE_3.html
+
+# Chi-squared test: p-value
+HWE.test <- data.frame(sapply(seppop(gen_rpbb), 
+                              function(ls) pegas::hw.test(ls, B=0)[,3]))
+HWE.test.chisq <- t(data.matrix(HWE.test))
+{cat("Chi-squared test (p-values):", "\n")
+round(HWE.test.chisq,3)}
+
+# Monte Carlo: p-value
+HWE.test <- data.frame(sapply(seppop(gen_rpbb), 
+                              function(ls) pegas::hw.test(ls, B=1000)[,4]))
+HWE.test.MC <- t(data.matrix(HWE.test))
+{cat("MC permuation test (p-values):", "\n")
+round(HWE.test.MC,3)}
+
+#
+
+alpha=0.05
+Prop.loci.out.of.HWE <- data.frame(Chisq=apply(HWE.test.chisq<alpha, 2, mean), 
+           MC=apply(HWE.test.MC<alpha, 2, mean))
+#Prop.loci.out.of.HWE             # Type this line again to see results table
+
+#
+
+Prop.pops.out.of.HWE <- data.frame(Chisq=apply(HWE.test.chisq<alpha, 1, mean), 
+           MC=apply(HWE.test.MC<alpha, 1, mean))
+#Prop.pops.out.of.HWE             
+
+#
+Chisq.fdr <- matrix(p.adjust(HWE.test.chisq,method="fdr"), 
+                    nrow=nrow(HWE.test.chisq))
+MC.fdr <- matrix(p.adjust(HWE.test.MC, method="fdr"), 
+                    nrow=nrow(HWE.test.MC))
+
+Prop.pops.out.of.HWE <- data.frame(Chisq=apply(HWE.test.chisq<alpha, 1, mean), 
+           MC=apply(HWE.test.MC<alpha, 1, mean),
+           Chisq.fdr=apply(Chisq.fdr<alpha, 1, mean),
+           MC.fdr=apply(MC.fdr<alpha, 1, mean))
+Prop.pops.out.of.HWE             
+
+```
+
+There is evidence that, globally, loci are out of HWE. But this is due to differences between subpopulations. Shalene handles this nicely in the paper noted above, so it's something to report...but not really anything to worry about downstream. 
+
+#### Linkage Disequilibrium
+
+LD between loci - not likely an issue here (p.rD and p.Ia > 0.05; no consistent linkage in the pairwise comparison either). 
+
+```{r ld, cache=TRUE}
+
+poppr::ia(gen_rpbb, sample = 999)
+#LD.pair <- poppr::pair.ia(gen_rpbb) # not displayed to save space as it's not necessary
+#LD.pair
+
+
+```
+## Null alleles
+
+Null allele frequences are within the range typical for pop gen analysis with microsatellites and unlikely to be an issue. Can cite https://www.nature.com/articles/6800545 and write it like they do in https://peerj.com/articles/13565/ where they say, "Nevertheless, the frequency of null alleles inferred with the methods of Brookfield and Chakraborty (0.09 and 0.13, respectively) is in line with values commonly reported in the literature and is unlikely to cause a major bias in downstream population structure analyses (Dakin & Avise, 2004)."
+
+```{r null alleles check, cache=TRUE}
+# this might be redundant with allelic richness below
+
+#https://bookdown.org/hhwagner1/LandGenCourse_book/WE_3.html
+# Null alleles: depends on method! See help file.
+Null.alleles <- PopGenReport::null.all(gen_rpbb)
+
+Null.alleles$null.allele.freq$summary2
+
+```
+
+
+
+#### Missing loci
+
+There are no loci with <80% completeness
+
+```{r qc loci missing}
+
+# FILTERING LOCI, GENOTYPES, INDIVIDUALS, ETC -----------------------------
+
+
+# MISSING LOCI
+
+
+locimiss_rpbb = propTyped(gen_rpbb, by = "loc")
+locimiss_rpbb[which(locimiss_rpbb < 0.80)] # print loci with < 80% complete genotypes
+
+# there are no loci with <80% completeness
+
+# # Barplot
+barplot(locimiss_rpbb, ylim = c(0,1), ylab = "Complete genotypes (proportion)", xlab = "Locus", las = 2, cex.names = 0.7)
+
+```
+
+#### Individuals with poor data
+
+There are no individuals with poor data in the dataset...but that is because I also excluded them earlier in the process. So this is just a sanity check. 
+
+```{r qc individuals data poor}
+
+# INDIVIDUALS WITH POOR DATA
+
+indmiss_rpbb <- propTyped(gen_rpbb, by = "ind")
+indmiss_rpbb[ which(indmiss_rpbb < 0.80) ] # print individuals with < 80% complete genotypes
+
+# remove individuals with less than 80% complete genotypes
+gen_rpbb_flt <- missingno(gen_rpbb, type = "geno", cutoff = 0.20) # this does nothing now because I filtered them in the COLONY run....
+```
+
+#### Duplicates or clones? 
+
+There are no duplicates or clones in the dataset. It's possible that there are prior to the COLONY filtering, so if re-running analysis keeping siblings in the dataset, double check. 
+
+```{r qc clone check}
+
+
+# CHECKING FOR DUPLICATES OR CLONES
+
+mlg(gen_rpbb_flt)
+
+# there are no dupes
+```
+
+#### Polymorphic
+
+Just a little sanity check that all the loci are polymorphic (they are)
+
+```{r qc polymorphic}
+
+
+
+# CHECK LOCI ARE STILL POLYMORPHIC
+
+isPoly(gen_rpbb_flt) %>% summary # they are all still polymorphic
+```
+
+## Preliminary Population Genetics Analysis
+
+### Summary Statistics
+
+
+
+```{r summary stats calc}
+
+
+# SUMMARY STATISTICS ------------------------------------------------------
+
+# NUMBER OF SAMPLES PER SITE
+
+v_rpbb_popN <- summary(gen_rpbb_flt$pop)
+
+df_rpbb_popN <- tibble::enframe(v_rpbb_popN) %>% rename(N = value)
+
+
+# PRIVATE ALLELES PER SITE
+
+v_rpbb_pa <- private_alleles(gen_rpbb_flt) %>% apply(MARGIN = 1, FUN = sum)
+
+
+# v_rpbb_popN <- summary(gen_rpbb_flt$pop)
+
+df_rpbb_pa <- tibble::enframe(v_rpbb_pa) %>% rename(PA = value)
+
+
+# ALLELIC RICHNESS PER SITE
+
+# allelic.richness(genind2hierfstat(gen_rpbb_flt))$Ar %>%
+#   apply(MARGIN = 2, FUN = mean) %>%
+#   round(digits = 3)
+
+v_rpbb_AR <- allelic.richness(genind2hierfstat(gen_rpbb_flt))$Ar %>%
+  apply(MARGIN = 2, FUN = mean) %>%
+  round(digits = 3)
+
+
+# v_rpbb_popN <- summary(gen_rpbb_flt$pop)
+
+df_rpbb_AR <- tibble::enframe(v_rpbb_AR) %>% rename(AR = value)
+
+
+```
+
+#### Table of various summary stats
+
+From the `summary` call to the genind object, we find the number of specimens per cluster, the number of private alleles (which is not very informative as it's correlated with sample size), and the rarefied allelic richness (which may be informative). It's quite debatable how well the rarefied richness does when dealing with such uneven population sizes. This is a case where re-running with different clusters might be more effective (i.e. splitting apart the big ones and then dropping the small ones for this analysis)
+
+```{r summary stats display}
+
+df_sum_stats <- full_join(df_rpbb_popN, df_rpbb_pa) %>% full_join(., df_rpbb_AR)
+
+df_sum_stats %>%
+  arrange(desc(N)) %>%
+  datatable(rownames = FALSE,
+            colnames = c("Cluster", "No. Specimens", "Private Alleles", "Allelic Richness"),
+            options = list(iDisplayLength = 13, dom = "t"))
+  
+
+```
+
+### Observed v. Expected Heterozygosity
+
+Only displaying populations with 5 or more specimens. 
+
+```{r heterozygosity, fig.width=8, fig.height=6}
+
+min_pop_size <- 5
+
+# HETEROZYGOSITY ----------------------------------------------------------
+
+# CALCULDATE BASIC STATS using hierfstat
+basic_rpbb <- basic.stats(gen_rpbb_flt, diploid = TRUE)
+
+# CALCULATE OBSERVED HETEROZYGOSITY
+
+Ho_rpbb <- apply(basic_rpbb$Ho, MARGIN = 2, FUN = mean, na.rm = TRUE) %>%
+  round(digits = 2)
+#Ho_rpbb
+
+# CALCULATE EXPECTED HETEROZYGOSITY
+
+He_rpbb <- apply(basic_rpbb$Hs, MARGIN = 2, FUN = mean, na.rm = TRUE) %>%
+  round(digits = 2)
+#He_rpbb
+
+# CREATE DATAFRAME OF OBSERVED AND EXPECTED HET
+
+df_het_rpbb <- data.frame(Site = names(Ho_rpbb), Ho = Ho_rpbb, He = He_rpbb) %>%
+  melt(id.vars = "Site") %>%
+  full_join(., df_rpbb_popN, by = c("Site" = "name"))
+
+# Italic label
+hetlab.o = expression(italic("H")[o])
+hetlab.e = expression(italic("H")[e])
+
+ggplot(data = filter(df_het_rpbb, N >= min_pop_size), aes(x = reorder(Site, -N), y = value, fill = variable))+
+  geom_bar(stat = "identity", position = position_dodge(), colour = "black")+
+  geom_text(aes(y = 0.9, label = N)) +
+  geom_hline(yintercept = 0.678, linetype = 2) +
+  # scale_y_continuous(expand = c(0,0), limits = c(0,0.50))+
+  scale_fill_manual(values = c("royalblue", "#bdbdbd"), labels = c(hetlab.o, hetlab.e))+
+  labs(x = "Region", y = "Heterozygosity") +
+  theme_classic(base_size = 15) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+**Figure 2.** Observed (blue) versus expected (grey) heterozygosity across the regions. Numbers above bars are the sample size for each region.
+
+
+```{r he ho means}
+
+ggplot(data = filter(df_het_rpbb, N >= min_pop_size), aes(x = variable, y = value, fill = variable))+
+  geom_boxplot()+
+  # geom_text(aes(y = 0.9, label = N)) +
+  # scale_y_continuous(expand = c(0,0), limits = c(0,0.50))+
+  scale_fill_manual(values = c("royalblue", "#bdbdbd"), labels = c(hetlab.o, hetlab.e))+
+  labs(x = "Measurement", y = "Heterozygosity") +
+  theme_classic(base_size = 15) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "none")
+
+```
+
+
+Same (except ALL clusters, not just those with >=5 specimens) as figure but in table format for investigating to your heart's content. Added some math for a little helper.  
+
+```{r table of observed v het}
+
+df_het_rpbb %>% 
+  pivot_wider(names_from = variable, values_from = value) %>% 
+  arrange(desc(N)) %>% 
+  mutate(diff_H = round(He - Ho,3),
+         Fis = round(1-(Ho/He),3)) %>% 
+  datatable(rownames = FALSE,
+            colnames = c("Cluster", "No. Specimens", "Ho", "He", "He - Ho", "Fis"),
+            options = list(iDisplayLength = 13, dom = "t"))
+
+```
+
+
+### F-Statistics
+
+Pairwise Fst heat map. Not sure what's up with the SE Minnesota population or Green Bay...but there's also not that many specimens from them (8 and 7, respectively)
+
+Below is with only populations having >=5 specimens
+```{r, cache=TRUE, fig.height = 10, fig.width = 10}
+
+# F STATISTICS -----------------------------------------------------------
+
+
+# Fis PER SITE
+
+fis_rpbb <- apply(basic_rpbb$Fis, MARGIN = 2, FUN = mean, na.rm = TRUE) %>%
+  round(digits = 3)
+
+ # Subset data sets to reduce computation time
+
+#find clusters with >=5 specimens
+v_big_pops <- df_rpbb_colonizer %>% group_by(named_cluster100) %>% tally() %>% filter(n>=min_pop_size) %>% pull(named_cluster100)
+
+gen_rpbb_flt2 = popsub(gen_rpbb_flt, sublist = v_big_pops)
+
+## Ale Ber Brd Pad 
+
+# Pairwise Fst
+
+fst_rpbb = genet.dist(gen_rpbb_flt2, method = "WC84")
+# fst_rpbb %>% round(digits = 3)
+
+# this plot kinda janky below
+
+
+# Convert dist object to data.frame
+fst.matrix = as.matrix(fst_rpbb)
+ind = which( lower.tri(fst.matrix, diag = FALSE), arr.ind = TRUE)
+fst.df = data.frame(Site1 = dimnames(fst.matrix)[[2]][ind[,2]],
+                    Site2 = dimnames(fst.matrix)[[1]][ind[,1]],
+                    Fst = fst.matrix[ ind ] %>% round(digits = 3))
+
+# Get upper triangle of the correlation matrix
+  get_upper_tri <- function(cormat){
+    cormat[lower.tri(cormat)]<- NA
+    return(cormat)
+  }
+
+
+upper_tri <- get_upper_tri(fst.matrix)
+
+# Melt the correlation matrix
+library(reshape2)
+melted_cormat <- melt(upper_tri, na.rm = TRUE)
+
+  # Convert minus values to zero
+melted_cormat$value[melted_cormat$value < 0] = 0
+
+# melted_cormat2 <- melted_cormat %>%
+#   filter(Var1 != Var2)
+
+melted_cormat2 <- melted_cormat %>%
+  mutate(value = ifelse(Var1 != Var2, value, NA))
+
+# Fst italic label
+fst.label = expression(italic("F")[ST])
+
+# Extract middle Fst value for gradient argument
+mid = max(melted_cormat2$value, na.rm = TRUE) / 2
+
+# # Heatmap
+
+ggplot(data = melted_cormat2, aes(Var2, Var1, fill = value))+
+ geom_tile(color = "white")+
+ scale_fill_gradient2(low = "black", mid = "grey", high = "#EEAD0E", midpoint = mid, name = fst.label, limits = c(0, max(melted_cormat2$value)), na.value = NA) +
+  theme_minimal(base_size = 15)+ 
+ theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+    size = 12, hjust = 1))+
+ coord_fixed() +
+  labs(x = "", y = "")
+
+#
+# ggplot(data = melted_cormat2, aes(Var2, Var1, fill = value))+
+#  geom_tile(color = "white")+
+#  scale_fill_gradient2(low = "blue", mid = "pink", high = "red", midpoint = mid, name = fst.label, limits = c(0, max(melted_cormat2$value)), breaks = c(0, 0.05, 0.10, 0.15, 0.20), na.value = NA) +
+#   theme_minimal()+
+#  theme(axis.text.x = element_text(angle = 45, vjust = 1,
+#     size = 12, hjust = 1))+
+#  coord_fixed() +
+#   labs(x = "", y = "")
+
+
+#   # Convert minus values to zero
+# fst.df$Fst[fst.df$Fst < 0] = 0
+# 
+# # Fst italic label
+# fst.label = expression(italic("F")[ST])
+# 
+# # Extract middle Fst value for gradient argument
+# mid = max(fst.df$Fst) / 2
+# 
+# # Plot heatmap
+# ggplot(data = fst.df, aes(x = Site1, y = Site2, fill = Fst))+
+#   geom_tile(colour = "black")+
+#   geom_text(aes(label = Fst), color="black", size = 3)+
+#   scale_fill_gradient2(low = "blue", mid = "pink", high = "red", midpoint = mid, name = fst.label, limits = c(0, max(fst.df$Fst)), breaks = c(0, 0.05, 0.10))+
+#   scale_x_discrete(expand = c(0,0))+
+#   scale_y_discrete(expand = c(0,0), position = "right")+
+#   theme(axis.text = element_text(colour = "black", size = 10, face = "bold"),
+#         axis.title = element_blank(),
+#         panel.grid = element_blank(),
+#         panel.background = element_blank(),
+#         legend.position = "right",
+#         legend.title = element_text(size = 14, face = "bold"),
+#         legend.text = element_text(size = 10)
+#   )
+
+
+
+
+```
+
+
+```{r fig.height = 5, fig.width = 5}
+df_fst <- fst.df %>% 
+  rowwise() %>%
+  mutate(pair_name = paste0(sort(c(Site1, Site2)), collapse = ", "))
+
+df_flt_joined <- dplyr::select(df_joined_clusters, name, distance)
+
+df_fst_join <- left_join(df_fst, df_flt_joined, by = c("pair_name" = "name"))
+
+df_fst_join %>% 
+  ggplot(., aes(x = distance/1000, y = Fst)) +
+  geom_jitter(size = 3.5, alpha = 0.5) +
+  theme_classic(base_size = 15) +
+  labs(x = "Distance Between Centroids (km)", y = "Fst")
+
+
+lm(Fst ~ distance, data = df_fst_join) %>% summary()
+lm(Fst ~ log(distance), data = df_fst_join) %>% summary()
+
+
+```
+
+## UPDATE!!!!!!!!!!!!!!!!!!! COLONY abundance and results
+
+Insert summary table, case studies of MnZoo, Turtle Valley, and other sites with >15? 10? whatever
+
+MN Zoo 2020
+```{r}
+
+read_rds("../analyses/analyses_output/03c_capwire_mnz20.Rdata") %>% 
+  mutate(prop_detected = n_colonies/ml.colony.num)
+
+```
+
+MN Zoo 2021
+```{r}
+
+read_rds("../analyses/analyses_output/03c_capwire_mnz21.Rdata") %>% 
+  mutate(prop_detected = n_colonies/ml.colony.num)
+
+```
+
+Turtle Valley 2021
+```{r}
+
+read_rds("../analyses/analyses_output/03c_capwire_turt21.Rdata") %>% 
+  mutate(prop_detected = n_colonies/ml.colony.num)
+
+```
+
+## UPDATE!!!!!!!!!!!!!!!!!!! Analysis of Males
+
+Determine numbers of males using the minimum homozygosity method, discuss implications
+
+```{r males}
+
+source("../analyses/03b_diploid_males.R")
+
+df_1het
+
+v_1het
+
+df_2het
+
+v_2het
+
+
+
+```
+
+```{r males some regions}
+
+tibble(site = c("MN Zoo", "MN Zoo", "Appalachian", "Appalachian"), threshold = c(1,2,1,2), prop_diploid = c(v_1het_mnzoo, v_2het_mnzoo, v_1het_app, v_2het_app))
+
+
+
+```
+MNZoo 2020
+
+```{r males mnzoo by year}
+
+#2020
+#for mnzoo at level 1
+(df_1het_mnzoo2020 <- df_het_matched %>% 
+   filter(str_detect(site, "Minnesota Zoo"), year == 2020) %>% 
+   mutate(is_het = if_else(het_count >= 1, "yes", "no")) %>% 
+   count(sex, is_het))
+  
+(v_1het_mnzoo2020 <- df_1het_mnzoo2020 %>% 
+  filter(is_het == "yes") %>% 
+  mutate(prop_diploid = n/sum(n)) %>% 
+  filter(sex == "male") %>% 
+  pull(prop_diploid))
+
+#for mnzoo at level 2
+(df_2het_mnzoo2020 <- df_het_matched %>% 
+    filter(str_detect(site, "Minnesota Zoo"), year == 2020) %>% 
+    mutate(is_het = if_else(het_count >= 2, "yes", "no")) %>% 
+    count(sex, is_het))
+
+(v_2het_mnzoo2020 <- df_2het_mnzoo2020 %>% 
+    filter(is_het == "yes") %>% 
+    mutate(prop_diploid = n/sum(n)) %>% 
+    filter(sex == "male") %>% 
+    pull(prop_diploid))
+```
+
+mnzoo 2021
+
+```{r mnzoo 2021 males}
+
+#2021
+#for mnzoo at level 1
+(df_1het_mnzoo2021 <- df_het_matched %>% 
+   filter(str_detect(site, "Minnesota Zoo"), year == 2021) %>% 
+   mutate(is_het = if_else(het_count >= 1, "yes", "no")) %>% 
+   count(sex, is_het))
+  
+(v_1het_mnzoo2021 <- df_1het_mnzoo2021 %>% 
+  filter(is_het == "yes") %>% 
+  mutate(prop_diploid = n/sum(n)) %>% 
+  filter(sex == "male") %>% 
+  pull(prop_diploid))
+
+#for mnzoo at level 2
+(df_2het_mnzoo2021 <- df_het_matched %>% 
+    filter(str_detect(site, "Minnesota Zoo"), year == 2021) %>% 
+    mutate(is_het = if_else(het_count >= 2, "yes", "no")) %>% 
+    count(sex, is_het))
+
+(v_2het_mnzoo2021 <- df_2het_mnzoo2021 %>% 
+    filter(is_het == "yes") %>% 
+    mutate(prop_diploid = n/sum(n)) %>% 
+    filter(sex == "male") %>% 
+    pull(prop_diploid))
+
+```
+

@@ -1,0 +1,48 @@
+Decorah_2021
+Decorah_2021
+11
+
+13        ! Number of loci
+666       ! Seed for random number generator
+0         ! 0/1=Not updating/updating allele frequency
+2         ! 2/1=Dioecious/Monoecious species
+0         ! 0/1=Inbreeding absent/present
+1         ! 0/1=Diploid species/HaploDiploid species
+1  1      ! 0/1=Polygamy/Monogamy for males & females
+0         ! 0/1 = Clone inference = No/Yes
+1         ! 0/1=Scale full sibship=No/Yes
+0         ! 0/1/2/3/4=No/Weak/Medium/Strong sibship prior; 4=Optimal sibship prior for Ne
+0         ! 0/1=Unknown/Known population allele frequency
+1         ! Number of runs
+3         ! 1/2/3/4 = Short/Medium/Long/VeryLong run
+0         ! 0/1=Monitor method by Iterate#/Time in second
+100000         ! Monitor interval in Iterate# / in seconds
+0         ! 0/1=DOS/Windows version
+1         ! 0/1/2=Pair-Likelihood-Score(PLS)/Full-Likelihood(FL)/FL-PLS-combined(FPLS) method
+3         ! 0/1/2/3=Low/Medium/High/VeryHigh precision
+
+btern01	bt28	b96	bt30	btms0081	btms0066	btms0083	b126	btms0062	btern02	btms0086	bl13	btms0059
+0	0	0	0	0	0	0	0	0	0	0	0	0
+0	0	0	0	0	0	0	0	0	0	0	0	0
+0.04	0.01	0.11	0.05	0.02	0.02	0.11	0	0.09	0.28	0	0.01	0.02
+BAFF244	106	106	180	186	193	193	240	240	304	308	129	150	300	322	181	181	264	292	191	197	267	279	185	185	356	356
+BAFF245	108	110	186	192	193	193	236	240	304	304	129	150	300	322	169	179	254	288	177	193	267	267	185	185	352	352
+BAFF246	110	114	186	186	191	193	236	242	304	304	141	168	298	344	165	181	260	260	181	181	267	267	185	185	344	356
+BAFF247	106	108	180	180	191	193	240	240	304	308	129	150	300	322	173	181	276	292	191	191	267	279	185	185	356	356
+BAFF248	106	108	180	180	191	193	240	240	304	308	129	150	322	342	181	181	264	292	197	199	267	279	185	185	356	356
+BAFF249	106	106	180	180	191	193	240	240	304	308	129	150	300	322	173	181	276	292	191	197	267	279	185	185	356	356
+BAFF250	106	114	180	186	191	193	236	242	304	304	150	168	344	344	165	181	248	260	181	181	267	267	185	185	344	352
+BAFF251	106	106	180	186	193	193	240	240	304	308	129	150	322	342	173	181	276	292	191	197	267	279	185	185	356	356
+BAFF254	106	108	186	186	191	193	240	240	304	304	132	150	300	350	165	181	264	300	189	189	267	267	185	185	348	352
+BAFF387	108	112	186	192	177	193	238	238	300	304	150	168	300	352	165	169	252	264	197	197	267	267	173	185	364	364
+BAFF388	108	112	186	192	193	193	240	240	300	304	150	168	336	352	165	169	252	256	197	213	267	267	173	185	352	364
+0.0 0.0 !Prob father and mother are in dataset
+0 0 !numbers of candidate males and females
+0 0 !Number of offspring with known father, exclusion threshold
+0 0 !Number of offspring with known mother, exclusion threshold
+0 !Number of known paternal sibships
+0 !Number of known maternal sibships
+0 !Number of offspring with known excluded fathers
+0 !Number of offspring with known excluded mothers
+0 !Number of offspring with known excluded paternal sibships
+0 !Number of offspring with known excluded maternal sibships

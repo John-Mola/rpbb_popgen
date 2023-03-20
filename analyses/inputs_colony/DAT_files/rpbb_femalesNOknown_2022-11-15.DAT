@@ -1,6 +1,7 @@
-'rpbb_femalesNOknown'
-'rpbb_femalesNOknown'
-307       ! Number of offspring in the sample
+name
+name
+307
+
 13        ! Number of loci
 666       ! Seed for random number generator
 0         ! 0/1=Not updating/updating allele frequency

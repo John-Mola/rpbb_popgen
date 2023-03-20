@@ -14,23 +14,23 @@ The workflow assumes you have...
 
 ## Various issues
 
-- Some metadata missing from Jay Watson (not critical)
-- `r emo::ji("warning")`There are several specimens from the MN Zoo with incorrect longitudes. They are -96deg but I believe they're simply just supposed to be -93. 
-    - Emailed Erik. For now, I changed all Camel Lot records to -93!
 - There are five specimens marked as NA for sex from Genevieve Pugesek. What to do with these?
     - From poking at their genotypes, they appear to be largely homozygous...it's possible they're males...but they are not completely homozygous...
     - `r emo::ji("warning")`Revisit `r emo::ji("warning")` For now, I have chosen to exclude them
 - B126 was erroneously named BT126 in the error rate file from USDA (but named B126_1 and B126_2 in the columns of the genotype sheet). Ensure this switch (from BT126 -> B126) is the correct name rather than the other way around (i.e. BT126 being correct)
 - Would be nice if the names of the clusters meant something (so renaming them from current random numbers)
-- `r emo::ji("warning")``r emo::ji("warning")``r emo::ji("warning")`the output of COLONY is very suspect!!!  
+- `r emo::ji("warning")``r emo::ji("warning")``r emo::ji("warning")`the output of COLONY is very suspect!!! 
+    - have various approaches I'm trying to correct this
 - `r emo::ji("warning")`currently trying 03a geneind object with and without removal of siblings...
-- `r emo::ji("warning")`Cluster number does not always match expected when 01d is loaded...this could just be due to filtering that occurs afterwards though (min loci, sex)
-- `r emo::ji("warning")``r emo::ji("warning")``r emo::ji("warning")`WHICH_NEST is not a reliable filter in 02a -- it contains some nests that are listed under column FROM_NEST as "nest" rather than yes/no/NA. FIX THIS! 
+- `r emo::ji("warning")`Cluster number does not always match expected when 01d is loaded...this could just be due to filtering that occurs afterwards though (min loci, sex)  
+    - this apparently is not a good note because I don't recall what it means...check 01d
 - `r emo::ji("warning")` Check for HWE and LD among markers...maybe this will help with COLONY?
 
+## Various things to do
 
-#TODO - Check for HWE
-#TODO - Check for LD
+- In 2022-12-15 I stopped after re-wrangling the 01 series (folding in Jay's updated metadata, making clusters for multiple buffers); resume this work by creating COLONY sub lists and making .DAT files in R (basically want to "automate" this a little bit in a way that's easy to re-do and backtrack if needed)
+- Check for HWE
+- Check for LD
 
 
 

@@ -1,0 +1,43 @@
+SE_Minnesota_2020
+SE_Minnesota_2020
+6
+
+13        ! Number of loci
+666       ! Seed for random number generator
+0         ! 0/1=Not updating/updating allele frequency
+2         ! 2/1=Dioecious/Monoecious species
+0         ! 0/1=Inbreeding absent/present
+1         ! 0/1=Diploid species/HaploDiploid species
+1  1      ! 0/1=Polygamy/Monogamy for males & females
+0         ! 0/1 = Clone inference = No/Yes
+1         ! 0/1=Scale full sibship=No/Yes
+0         ! 0/1/2/3/4=No/Weak/Medium/Strong sibship prior; 4=Optimal sibship prior for Ne
+0         ! 0/1=Unknown/Known population allele frequency
+1         ! Number of runs
+3         ! 1/2/3/4 = Short/Medium/Long/VeryLong run
+0         ! 0/1=Monitor method by Iterate#/Time in second
+100000         ! Monitor interval in Iterate# / in seconds
+0         ! 0/1=DOS/Windows version
+1         ! 0/1/2=Pair-Likelihood-Score(PLS)/Full-Likelihood(FL)/FL-PLS-combined(FPLS) method
+3         ! 0/1/2/3=Low/Medium/High/VeryHigh precision
+
+btern01	bt28	b96	bt30	btms0081	btms0066	btms0083	b126	btms0062	btern02	btms0086	bl13	btms0059
+0	0	0	0	0	0	0	0	0	0	0	0	0
+0	0	0	0	0	0	0	0	0	0	0	0	0
+0.04	0.01	0.11	0.05	0.02	0.02	0.11	0	0.09	0.28	0	0.01	0.02
+BAFF156	108	114	180	186	179	193	229	238	304	304	132	132	298	298	165	181	248	300	227	227	267	267	185	189	352	356
+BAFF157	108	110	180	186	179	193	238	238	304	304	132	182	298	330	165	165	248	256	195	195	267	267	185	189	356	360
+BAFF158	108	114	180	186	179	193	229	238	304	304	132	138	298	298	165	181	248	300	195	195	267	267	185	189	352	356
+BAFF159	108	108	198	198	191	191	236	236	304	304	141	141	0	0	173	173	256	256	213	213	267	267	185	185	360	360
+BAFF160	108	110	186	186	179	193	229	238	304	304	132	138	298	330	165	181	248	256	227	227	267	267	185	189	356	360
+BAFF161	108	114	180	186	193	193	238	238	304	304	132	182	298	330	165	165	248	256	227	227	267	267	185	189	356	360
+0.0 0.0 !Prob father and mother are in dataset
+0 0 !numbers of candidate males and females
+0 0 !Number of offspring with known father, exclusion threshold
+0 0 !Number of offspring with known mother, exclusion threshold
+0 !Number of known paternal sibships
+0 !Number of known maternal sibships
+0 !Number of offspring with known excluded fathers
+0 !Number of offspring with known excluded mothers
+0 !Number of offspring with known excluded paternal sibships
+0 !Number of offspring with known excluded maternal sibships

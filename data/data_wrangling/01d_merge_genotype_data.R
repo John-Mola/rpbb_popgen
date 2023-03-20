@@ -12,7 +12,7 @@
 
 # Things to do in this document
 
-#TODO - ensure output is ready to be converted to required files for COLONY
+#DONE - ensure output is ready to be converted to required files for COLONY
 
 
 # PACKAGES ----------------------------------------------------------------
@@ -88,7 +88,7 @@ df_flt_geno <- df_geno %>%
 
 df_merged <- inner_join(df_clustered, df_flt_geno, by = c("internal_barcode")) %>% 
   #just some rearranging of column order for prettiness
-  dplyr::select(internal_barcode, longname, sex, from_nest, which_nest, state, county, year, date, site, fl_genus, fl_species, cluster, latitude, longitude, n, everything()) %>% 
+  dplyr::select(internal_barcode, longname, sex, from_nest, which_nest, state, county, year, date, site, fl_genus, fl_species, cluster05, cluster10, cluster25, cluster50, cluster100, n_cluster05, n_cluster10, n_cluster25, n_cluster50, n_cluster100, named_cluster100, latitude, longitude, everything()) %>% 
   # REMOVE the bad loci
   dplyr::select(-v_bad_loci_cols) %>% 
   # COUNT the number of loci each individual has

@@ -1,0 +1,7 @@
+Archived Configurations with corresponding log likelihood
+Config#,1,LogLikelihood,-1.0920534671E+02
+OffspringID,FatherID,MotherID,ClusterIndex
+BAFF238,*1,#1,1
+BAFF243,*2,#2,2
+BAFF382,*3,#3,3
+BAFF383,*4,#4,4
