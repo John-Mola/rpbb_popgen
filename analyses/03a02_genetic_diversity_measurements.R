@@ -18,6 +18,7 @@ library(reshape2)
 library(lme4)
 library(MuMIn)
 library(multcomp)
+library(report)
 
 # DATA --------------------------------------------------------------------
 
@@ -108,7 +109,7 @@ anova(mod_he_site, mod_null_he_site)
 r.squaredGLMM(mod_he_site)
 posthoc_he_site <- glht(mod_he_site, linfct = mcp(site = "Tukey"))
 summary(posthoc_he_site)
-
+df_cld_pop_he <- broom::tidy(cld(posthoc_he_site))
 
 
 # FITTING A MODEL OF ALLELIC RICHNESS BY SITE -----------------------------
@@ -138,6 +139,7 @@ anova(mod_ar_site, mod_null_ar_site)
 r.squaredGLMM(mod_ar_site)
 posthoc_ar_site <- glht(mod_ar_site, linfct = mcp(site = "Tukey"))
 summary(posthoc_ar_site)
+df_cld_pop_ar <- broom::tidy(cld(posthoc_ar_site))
 
 
 # FITTING A MODEL OF FIS BY SITE ------------------------------------------
@@ -170,6 +172,7 @@ anova(mod_fis_site, mod_null_fis_site)
 r.squaredGLMM(mod_fis_site)
 posthoc_fis_site <- glht(mod_fis_site, linfct = mcp(site = "Tukey"))
 summary(posthoc_fis_site)
+df_cld_pop_fis <- broom::tidy(cld(posthoc_fis_site))
 
 
 
@@ -231,7 +234,9 @@ anova(mod_he_reg, mod_null_he_reg)
 r.squaredGLMM(mod_he_reg)
 posthoc_he_reg <- glht(mod_he_reg, linfct = mcp(region = "Tukey"))
 summary(posthoc_he_reg)
-                                                                                                                          
+report(mod_he_reg)
+df_cld_reg_he <- broom::tidy(cld(posthoc_he_reg))
+
 
 
 # FITTING A MODEL OF ALLELIC RICHNESS ACROSS REGIONS ----------------------
@@ -249,7 +254,9 @@ r.squaredGLMM(mod_ar_reg)
 posthoc_ar_reg <- glht(mod_ar_reg, linfct = mcp(region = "Tukey"))
 summary(posthoc_ar_reg)
 # ggplot(df_ar_reg, aes(x = region, y = ar, fill = region)) + geom_boxplot()
-                                                                                                                       
+report(mod_ar_reg)
+df_cld_reg_ar <- broom::tidy(cld(posthoc_ar_reg))
+
 
 
 # MODELING FIS BY REGION --------------------------------------------------
@@ -269,6 +276,8 @@ r.squaredGLMM(mod_fis_reg)
 posthoc_fis_reg <- glht(mod_fis_reg, linfct = mcp(region = "Tukey"))
 summary(posthoc_fis_reg)
 # ggplot(df_fis_reg, aes(x = region, y = fis, fill = region)) + geom_boxplot()
+report(mod_fis_reg)
+df_cld_reg_fis <- broom::tidy(cld(posthoc_fis_reg))
 
 
                                                                                               
@@ -294,3 +303,26 @@ saveRDS(basic_rpbb_reg, "./analyses/analyses_output/03a02_output_basic_rpbb_reg.
 # saving the genind region
 
 saveRDS(gen_rpbb_reg, "./analyses/analyses_output/03a02_output_gen_rpbb_reg.Rdata")
+
+# saving df ar, he, fis for region plotting
+
+saveRDS(df_ar_reg, "./analyses/analyses_output/03a02_output_df_ar_reg.Rdata")
+saveRDS(df_hs_reg, "./analyses/analyses_output/03a02_output_df_hs_reg.Rdata")
+saveRDS(df_fis_reg, "./analyses/analyses_output/03a02_output_df_fis_reg.Rdata")
+
+# saving df ar, he, fis for pop level table
+
+saveRDS(df_fis_site, "./analyses/analyses_output/03a02_output_df_fis_pop.Rdata")
+saveRDS(df_hs_site, "./analyses/analyses_output/03a02_output_df_hs_pop.Rdata")
+
+
+# saving df of cld outputs
+
+saveRDS(df_cld_pop_ar, "./analyses/analyses_output/03a02_output_df_cld_pop_ar.Rdata")
+saveRDS(df_cld_pop_he, "./analyses/analyses_output/03a02_output_df_cld_pop_he.Rdata")
+saveRDS(df_cld_pop_fis, "./analyses/analyses_output/03a02_output_df_cld_pop_fis.Rdata")
+
+saveRDS(df_cld_reg_ar, "./analyses/analyses_output/03a02_output_df_cld_reg_ar.Rdata")
+saveRDS(df_cld_reg_he, "./analyses/analyses_output/03a02_output_df_cld_reg_he.Rdata")
+saveRDS(df_cld_reg_fis, "./analyses/analyses_output/03a02_output_df_cld_reg_fis.Rdata")
+

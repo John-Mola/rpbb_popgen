@@ -1,0 +1,9 @@
+FullSibshipIndex Prob(Inc.) Prob(Exc.)    Member1,Member2,Member3
+               1     1.0000     1.0000    BAFF141
+               2     1.0000     1.0000    BAFF163
+               3     0.5923     0.5923    BAFF142,BAFF164,BAFF146
+               4     1.0000     1.0000    BAFF143
+               5     1.0000     0.9999    BAFF144
+               6     1.0000     1.0000    BAFF145
+               7     1.0000     0.9993    BAFF165
+               8     1.0000     1.0000    BAFF147,BAFF167

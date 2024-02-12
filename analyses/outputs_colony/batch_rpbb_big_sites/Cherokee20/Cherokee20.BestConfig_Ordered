@@ -1,0 +1,12 @@
+         OffspringID             FatherID             MotherID  ClusterIndex
+             BAFF141                   *1                   #1             1
+             BAFF163                   *2                   #2             2
+             BAFF142                   *3                   #3             3
+             BAFF164                   *3                   #3             3
+             BAFF146                   *3                   #3             3
+             BAFF143                   *4                   #4             4
+             BAFF144                   *5                   #5             5
+             BAFF145                   *6                   #6             6
+             BAFF165                   *7                   #7             7
+             BAFF147                   *8                   #8             8
+             BAFF167                   *8                   #8             8

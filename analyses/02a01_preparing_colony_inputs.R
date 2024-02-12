@@ -4,17 +4,10 @@
 #                                                          #
 ##%######################################################%##
 
-#THIS INTENDED AS A BRANCH OF 02A TO DO THIS A BIT "AUTOMATED" AND ALL IN R
-
 # Purpose: This script is used to take the output of 01d (merged genotype file) and prepare various inputs for COLONY. 
 
 # We need an ERR file and a GENO file. We then paste those together to make the DAT file. 
 
-#FUTURE DATS TO MAKES
-#TODO - only females, known colonies excluded (done here!; I think the known colonies could throw off COLONY's assumptions)
-#TODO - all females
-#TODO - only known colonies
-#TODO - males
 
 # PACKAGES ----------------------------------------------------------------
 
@@ -143,7 +136,7 @@ for (x in 1:nrow(df_files)) {
 
 # MAKE EXCEL FILE FOR EASY RUNNING OF COLONY ------------------------------
 
-# this is just to help me run them all...I'm sure I could run this using the batch fuction available in colony...but I wanted them in separate folders and honestly it doesn't take that long to copy-paste each COLONY command so whatever...it's all automated until the very last step apparently! lol
+# this is just to help me run them all...I'm sure I could run this using the batch fuction available in colony...but I wanted them in separate folders and honestly it doesn't take that long to copy-paste each COLONY command so whatever...it's all automated until the very last step apparently! 
 
 v_datfiles <- list.files("./analyses/inputs_colony/DAT_files/batch_rpbb/", full.names = TRUE)
 
@@ -151,6 +144,7 @@ df_helper <- data_frame(batch = df_groups_key$clst_yr,
                         begin = "~/Colony2_Mac_01_02_2022/run_colony.out",
                         middle1 = "IFN:../../../.",
                         middle2 = v_datfiles,
+                        # this last part is a music file in my Downloads folder that I play to let me know the script is done running; change it or download a song into your Downloads folder named Dry Town I guess! 
                         end =  " ; afplay ~/Downloads/Dry\ Town.mp3") %>% 
   mutate(colcommand = paste(begin, paste0(middle1, middle2), end))
 

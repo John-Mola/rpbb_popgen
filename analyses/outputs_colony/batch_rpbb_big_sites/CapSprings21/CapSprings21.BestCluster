@@ -1,0 +1,10 @@
+ClusterIndex Probability          OffspringID             FatherID             MotherID
+           1      1.0000              BAFF494                   *1                   #1
+           2      1.0000              BAFF495                   *2                   #2
+           3      1.0000              BAFF496                   *3                   #3
+           3      1.0000              BAFF502                   *3                   #3
+           4      0.9952              BAFF497                   *4                   #4
+           5      1.0000              BAFF498                   *5                   #5
+           6      0.9952              BAFF499                   *6                   #6
+           7      1.0000              BAFF500                   *7                   #7
+           8      1.0000              BAFF503                   *8                   #8

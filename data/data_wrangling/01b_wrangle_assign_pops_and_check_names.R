@@ -6,8 +6,7 @@
 ##%######################################################%##
 
 
-# The purpose of this document is to continue the wrangling of the 2020/2021 RPBB genetic data. Within this document, we ensure consistent naming of sites, states, etc. Originally I planned to do the spatial clustering here, too...but that might be a fraught step so I'll do it in the next script. 
-
+# The purpose of this document is to continue the wrangling of the 2020/2021 RPBB genetic data. Within this document, we ensure consistent naming of sites, states, etc.
 
 # PACKAGES ----------------------------------------------------------------
 
@@ -34,8 +33,6 @@ df_meta <- readRDS("./data/data_output/output_01a_df_rpbb_metadata.Rdata")
 # For females there is "f", "female", and "worker"
 # there are NO gynes in the dataset, so caste is unnecessary
 # For males there is "m" "male" and "Male"
-# There are 5 NAs for some reason...
-#TODO - !!!!!!!!!!!!FOR NOW WE EXCLUDE THE NA SEX INDIVIDUALS!!!!!!!!!!!!!!!
 
 v_males <- c("m", "male", "Male")
 v_females <- c("f", "female", "Worker")
@@ -54,8 +51,6 @@ v_west_virginia <- c("West Virginia", "WV")
 # the only issues with counties seem to be capitalization, so I just add that to the wrangling below
 
 # Consistent SITE labels ---
-
-# actually...I'm not sure this really matters and it's kinda a pain. If it matters down the line, I'll do it. But for now, I should probably focus on doing smarter things like measuring the distance between everyone and then clustering them
 
 # Consistent FLORAL_HOST labels
 
@@ -111,7 +106,7 @@ df_wrg_meta <- df_meta %>%
          which_nest = case_when(
            is.na(from_nest) ~ NA_character_,
            from_nest == "yes" ~ site))
-  
+
 
 
 saveRDS(df_wrg_meta, "./data/data_output/output_01b_df_rpbb_metadata.Rdata")

@@ -4,9 +4,8 @@
 #                                                          #
 ##%######################################################%##
 
-#PURPOSE - this script is to take the output of COLONY, filter out "bad" families, do some merging with the original metadata file, and otherwise "wrangle" the information to be usable for downstream analysis
+#PURPOSE - this script is to take the output of COLONY, filter out "bad" families, do some merging with the original metadata file, and otherwise "wrangle" the information to be usable for downstream analysis; filename is a bit weird because of carryover from an old version
 
-#NOTE! - This is the batch colonizeR used for loading in many small files. It's still a somewhat messy script. Consider it a branch of the main 02c script for now (though it may become the main one)
 
 # PACKAGES ----------------------------------------------------------------
 
@@ -101,16 +100,3 @@ saveRDS(v_rpbb_keepers, file = "./analyses/outputs_colony/r_colonizer/02c_v_rpbb
 
 
 
-# # SANITY CHECK OF LOCATIONS -----------------------------------------------
-# 
-
-
-
-
-# #TODO - figure out why this is happening...cause it seems wrong. Re-ran COLONY turning off polyandry but that doesn't seem to fix it completely...it's certainly improved though. 
-# #TODO - re-running AGAIN allowing inbreeding in the calculation. The manual says this may slow down computation a lot...but does not say it would "hurt" per se
-# 
-# # this takes the output, removes singletons, groups by family, and then determines which clusters each family (colony) belongs to. Because clusters are grouped by proximity...families with individuals across clusters seem kind of suspicious...There are several colonies with representatives from multiple clusters. 
-# df_batch_colonizer %>% filter(family_id != "s") %>% group_by(family_id) %>% summarise(which_clusters = toString(unique(named_cluster100))) %>% View()
-# 
-# 

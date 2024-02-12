@@ -60,10 +60,9 @@ amova_shuf_rpbb
 
 amova_shuf_signif_rpbb    <- randtest(amova_shuf_rpbb, nrepet = 999)
 
-# this results in variation within samples/between samples still being significant, but variations between populations no longer significant. I think that makes sense??
+
 amova_shuf_signif_rpbb
 plot(amova_shuf_signif_rpbb)
-
 
 
 # # RE-RUNNING WITHOUT WITHIN SAMPLE VARIANCE -------------------------------

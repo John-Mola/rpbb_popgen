@@ -14,6 +14,7 @@
 library(pophelper)
 library(gridExtra)
 library(tidyverse)
+library(adegenet)
 
 # DATA --------------------------------------------------------------------
 

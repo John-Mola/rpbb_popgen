@@ -8,7 +8,7 @@
 #PURPOSE - to take the metadata with lat-long and assign them to clusters based on some threshold rule of distance. This seems preferable to assigning to population based on some more arbitrary metric (like county or just...my decision)
 
 
-### Going to try to follow the StackOverflow page here: https://gis.stackexchange.com/questions/17638/clustering-spatial-data-in-r
+### This code largely follows the StackOverflow page here: https://gis.stackexchange.com/questions/17638/clustering-spatial-data-in-r
 
 
 # PACKAGES ----------------------------------------------------------------
@@ -36,7 +36,7 @@ df_meta2=rename(df_meta, x=longitude,y=latitude) %>%
 
 # Transforming into UTM -----
 geo_meta <- st_as_sf(df_meta2, coords = c("x", "y"), crs = 4326)
-geo_meta2<-st_transform(x = geo_meta, crs = 32616) # ask Amy about doing these steps
+geo_meta2<-st_transform(x = geo_meta, crs = 32616) 
 geo_meta2$lon<-st_coordinates(geo_meta2)[,1] # get coordinates
 geo_meta2$lat<-st_coordinates(geo_meta2)[,2] # get coordinates
 
@@ -64,7 +64,7 @@ geo_meta2$cluster50 <- cutree(hc, h=d50)
 geo_meta2$cluster100 <- cutree(hc, h=d100)
 
 
-#changed this to multiple thresholds on 2022-12-15...this is going to result in stuff downstream breaking as there is now no "cluster" column
+#changed this to multiple thresholds on 2022-12-15
 
 df_geo <-st_set_geometry(geo_meta2, NULL) %>% 
   inner_join(., df_meta) %>% 
@@ -91,10 +91,7 @@ df_geo_named <- df_geo %>%
     cluster100 == 13 ~ "Central Wisconsin"
   ))
 
-# df_geo_check <- df_geo %>% 
-#   mutate(lonely = if_else(n < 3, "lonely", "grouped")) %>% 
-#   filter(sex == "female")
-  
+
 
 # EXPORT RESULT -----------------------------------------------------------
 
@@ -112,6 +109,22 @@ df_cluster100_centroids <- df_geo_named %>%
 
 saveRDS(df_cluster100_centroids, "./data/data_output/output_01c_df_cluster100_centroids.Rdata")
 
+# FINDING CENTROIDS OF SITE (10KM LEVEL) CLUSTERS -------------------------------------------
+#!!!!!!!!!WARNING!!!!!!!!!!! - this will break if colonizer from step 02c01 not loaded, done out of order...So, it's a bit annoying, but you'll need to run 01d, 02a, COLONY, etc before running these subsequent steps. (Source ensures the output of 02c are actually in your environment, not just previously run)
+
+
+source("./analyses/02c01_batch_colonizeR.R")
+
+df_cluster10_centroids <- df_batch_colonizer %>% 
+  group_by(cluster10, year) %>% 
+  summarise(latitude_center = mean(latitude),
+            longitude_center = mean(longitude),
+            lat_m_center = mean(lat),
+            long_m_center = mean(lon),
+            named_cluster100 = first(named_cluster100),
+            n = n())
+
+saveRDS(df_cluster10_centroids, "./data/data_output/output_01c_df_cluster10_centroids.Rdata")
 
 # FINDING PAIRWISE DISTANCE OF ALL CENTROIDS ------------------------------
 
@@ -127,38 +140,3 @@ df_joined_clusters <- left_join(df_cluster100_centroids2, df_cluster100_centroid
 
 saveRDS(df_joined_clusters, "./data/data_output/output_01c_df_cluster100_pw_distances.Rdata")
 
-
-# crossing(df_cluster100_centroids, df_cluster100_centroids)
-
-
-# CHECKING STUFF ----------------------------------------------------------
-
-
-#
-# df_affinis_historic <- read_csv("./data/data_raw/meta_rpbb_external/rpbb_historic_counties.csv")  %>% clean_names()
-# 
-# 
-# v_historic_states <- df_affinis_historic %>% distinct(state) %>% pull(state)
-# 
-# bg_map <- st_as_sf(map("state", regions = v_historic_states, plot = FALSE, fill = TRUE))
-# 
-# p_map <- ggplot() +
-#   geom_sf(data = bg_map, fill = "antiquewhite", alpha = 0.4, color = "grey80", size = 0.4) +
-#   #geom_sf(data = bg_map_extant, fill = "grey", alpha = 0.5, color = "grey80", size = 0.4, aes(text = ID)) +
-#   geom_jitter(data = filter(df_geo_named, sex == "female"), aes(x = longitude, y = latitude, fill = as.factor(named_cluster100), shape = as.factor(year)), alpha = 0.5, color = "black", size = 2) +
-#   # annotation_scale(location = "bl", width_hint = 0.4) +
-#   # annotation_north_arrow(location = "bl", which_north = "true",
-#   #                        pad_x = unit(0.1, "in"), pad_y = unit(0.3, "in"),
-#   #                        style = north_arrow_fancy_orienteering) +
-#   geom_point(data = df_cluster100_centroids, aes(x = longitude_center, y = latitude_center)) +
-#   theme_bw() +
-#   theme(panel.grid.major = element_line(color = gray(0.9),
-#                                         linetype = "dashed",
-#                                         size = 0.2),
-#         panel.background = element_rect(fill = "white"),
-#         legend.position = "right")
-#   # labs(x = "", y = "", fill = "Region")
-# 
-# ggplotly(p_map)
-# 
-# # df_geo %>% count(cluster) %>% View

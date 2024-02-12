@@ -10,11 +10,6 @@
 #PURPOSE - to take the metadata output of 01c (where individuals are assigned to "clusters") and merge it with the genotype data provided by the USDA
 
 
-# Things to do in this document
-
-#DONE - ensure output is ready to be converted to required files for COLONY
-
-
 # PACKAGES ----------------------------------------------------------------
 
 library(tidyverse)
@@ -32,7 +27,6 @@ df_geno <- readxl::read_xlsx("./data/data_raw/Bombus_affinis_repository__msatdat
 
 
 # USDA error rate data
-#NOTE!!!! - I manually renamed "BT126" in the error rate file as "B126" to match the genotype file. I believe this is the correct name for this locus. 
 df_err_rates <- readxl::read_xlsx("./data/data_raw/Bombus_affinis_repository__msatdata_ver_22September2022.xlsx", sheet = 3) %>% clean_names() %>% dplyr::select(locus, error_rate)
 
 

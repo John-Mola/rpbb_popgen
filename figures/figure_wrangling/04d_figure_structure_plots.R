@@ -16,6 +16,7 @@ library(pophelper)
 library(gridExtra)
 library(sf)
 library(maps)
+library(ggnewscale)
 
 #affinis colors
 v_affinis_colors <- c("#060200", "#F4D75D", "#D17E23")
@@ -47,17 +48,17 @@ grid.arrange(p_evanno)
 
 # pop list
 
-df_pops <- tibble(pop = as.character(gen_rpbb$pop))
+df_pops <- tibble(pop = as.character(gen_rpbb@pop))
 
 #making dataframe from the merged runs at k=3, adding ID columns for population and individual. Pivoting to make compatible with ggplot language. Factoring to rearrange for approximate left-to-right ordering by longitude, group by individual ID for creating a column of Clust3 values for arranging (to make the plot prettier, the calculation itself is not biologically meaningful, really)
 
 df_admixed_labeled <- bind_rows(mergedk3) %>% 
-  mutate(pop = as.character(gen_rpbb$pop),
-         indid = row.names(gen_rpbb$tab)) %>% 
+  mutate(pop = as.character(gen_rpbb@pop),
+         indid = row.names(gen_rpbb@tab)) %>% 
   pivot_longer(cols = starts_with("Cluster"),
                names_to = "cluster",
                values_to = "proportion") %>% 
-  mutate(pop = factor(pop, levels = c("Twin Cities", "SE Minnesota", "Decorah", "Iowa City", "Quad Cities", "Central Wisconsin", "Madison", "North Illinois","Green Bay", "North Milwaukee", "Milwaukee", "Chicago", "Appalachian"))) %>% 
+  mutate(pop = factor(pop, levels = c("Twin Cities", "SE Minnesota", "Iowa City", "Decorah",  "Quad Cities", "Madison", "Central Wisconsin",  "North Illinois","Milwaukee",  "Chicago", "North Milwaukee", "Green Bay",  "Appalachian"))) %>% 
   group_by(indid) %>% 
   mutate(clust3prop = if_else(cluster == "Cluster3", proportion, 0)) %>% 
   arrange(desc(clust3prop))
@@ -77,7 +78,7 @@ df_admixed_labeled <- bind_rows(mergedk3) %>%
     panel.grid = element_blank(),
     legend.position = "none",
     axis.text.y = element_blank(),
-    strip.text.x = element_text(size = 15, angle = 90)
+    strip.text.x = element_text(size = 19, angle = 90, hjust = 0)
   ) +
   scale_fill_manual(values = v_affinis_colors)
 )
@@ -87,8 +88,8 @@ df_admixed_labeled <- bind_rows(mergedk3) %>%
 
 #create dataframe summarizing values from merged3k
 df_combined_admix <- bind_rows(mergedk3) %>% 
-  mutate(pop = as.character(gen_rpbb$pop),
-         indid = row.names(gen_rpbb$tab)) %>% 
+  mutate(pop = as.character(gen_rpbb@pop),
+         indid = row.names(gen_rpbb@tab)) %>% 
   group_by(pop) %>% 
   summarise(cluster1 = mean(Cluster1),
             cluster2 = mean(Cluster2),
@@ -99,10 +100,18 @@ df_combined_admix <- bind_rows(mergedk3) %>%
 df_cent_admix <- inner_join(df_centroids, df_combined_admix, by = c("named_cluster100" = "pop"))
 
 # focused map of known states
-focused_bg_map <- st_as_sf(map("state", regions = c("Minnesota", "Wisconsin", "Iowa", "Illinois", "Indiana", "Michigan", "Ohio", "Kentucky", "West Virginia", "Virginia"), plot = FALSE, fill = TRUE))
+focused_bg_map <- st_as_sf(map("state", regions = c("Minnesota", "Wisconsin", "Iowa", "Illinois", "Indiana", "Michigan", "Ohio", "Kentucky", "West Virginia", "Virginia"), plot = FALSE, fill = TRUE)) %>% 
+  mutate(cons_unit = case_when(
+    ID %in% c("minnesota", "wisconsin") ~ "CU 1",
+    ID %in% c("iowa", "illinois") ~ "CU 2",
+    ID %in% c("indiana", "michigan", "ohio") ~ "CU 3", 
+    ID %in% c("virginia", "west virginia", "kentucky") ~ "CU 4"
+  ))
 
 p_pie_map <- ggplot() +
-  geom_sf(data = focused_bg_map, fill = "antiquewhite", alpha = 0.4, color = "grey80", size = 0.4) +
+  geom_sf(data = focused_bg_map, alpha = 0.5, color = "grey60", size = 0.4, aes(fill = cons_unit)) +
+  scale_fill_manual(values = hcl.colors(n = 4, palette = "Pastel 1")) + 
+  new_scale_fill() +
   geom_point(data = df_centroids, aes(x = longitude_center, y = latitude_center)) +
   geom_scatterpie(aes(x=longitude_center, y=latitude_center, group = named_cluster100, r = log(n)/4), data = df_cent_admix, cols = c("cluster1", "cluster2", "cluster3"), alpha = 0.8) +
   theme_bw(base_size = 20) +
@@ -126,6 +135,8 @@ p_pie_map
 
 saveRDS(p_evanno, "./figures/figures_output/04d_figure_evanno.Rdata")
 
-ggsave(p_structure, filename =  "./figures/figures_output/04d_figure_structure.svg", width = 8, height = 4)
+#Need to overlay the structure plot with the map; also need to manually jitter the pie locations; need to manually repair the color of UP with #FFC5D0; then this gets merged with DAPC figure made in 04e
+
+ggsave(p_structure, filename =  "./figures/figures_output/04d_figure_structure.svg", width = 10.5, height = 4)
 
 ggsave(p_pie_map, filename = "./figures/figures_output/04d_figure_pie_structure_map.svg", height = 10, width = 10)

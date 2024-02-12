@@ -1,0 +1,222 @@
+﻿species,subpopulation,locality,latitude,Longitude,n_individuals,n_colonies,n_colony_detected
+impatiens,impALa,"Dauphin Island, AL (AL09.site01)",30.2548,-88.1122,20,11,0.55
+impatiens,impALb,"Greenville, Fort Dale Rd (AL09.site02)",31.8543,-86.6413,14,14,1
+impatiens,impAR,West of Ozark National Forest (AR08.site01),36.1015,-94.4352,4,4,1
+impatiens,impAR,near Devil's Den State Park (AR08.site02),35.8207,-94.159,24,22,0.917
+impatiens,impGA,Newt Green Rd (GA09.site03),34.2657,-84.2724,13,10,0.769
+impatiens,impIAa,Hwy 63 N of Oskaloosa (IA08.site03),41.3298,-92.6473,19,15,0.789
+impatiens,impIAb,W. of Charles City on Hwy 18 (IA08.site04),43.0656,-92.6489,10,10,1
+impatiens,impILa,near Hewitville/Taylorville (2008) (IL08.site13),39.5248,-89.3284,17,16,0.941
+impatiens,impILb,Sand Ridge State Park (IL08.site07b),40.3902,-89.8584,20,17,0.85
+impatiens,impILb,Research Plot (ARS) 8 mi off I-74 (IL08.site09),40.9165,-89.8031,12,11,0.917
+impatiens,impILc,"Meadowbrook Park, Urbana (IL08.site10)",40.0833,-88.2025,15,14,0.933
+impatiens,impILd,"Bluff Spring Fen, Elgin, IL (IL08.site11B)",42.0138,-88.252,24,23,0.958
+impatiens,impILd,"Rockford, IL",42.2651,-89.0133,5,5,1
+impatiens,impILe,Murphysboro (Hwy 149) (IL08.site01B),37.7735,-89.4186,20,20,1
+impatiens,impILe,near Dixon Springs S.P. (IL08.site16),37.3793,-88.5923,14,14,1
+impatiens,impINa,Winamac (US35) (IN08.site05),41.0231,-86.5835,20,20,1
+impatiens,impINb,Nebraska (US50) (IN08.site04),39.0653,-85.4376,23,23,1
+impatiens,impINc,Alamo (Hwy 234) (IN08.site01),39.9602,-87.0686,24,23,0.958
+impatiens,impINd,Newton-Stewart S.R.A. (IN08.site02),38.404,-86.6613,24,23,0.958
+impatiens,impMA,"Pond Road, Wellesley (MA09.site02)",42.2912,-71.3191,25,23,0.92
+impatiens,impMNa,Sakatah State Park (MN08.site05),44.2196,-93.2283,12,12,1
+impatiens,impMNb,Great River Bluff State Park (MN08.site06),43.9752,-91.4277,20,17,0.85
+impatiens,impMOa,Brookfield (Route 11) (MO08.site06),39.7526,-93.0808,7,7,1
+impatiens,impMOa,Atlanta (Hwy 63 & Road M) (MO08.site07),39.8987,-92.4737,12,12,1
+impatiens,impMOa,Hwy 15 near Iowa border (MO08.site09),40.5002,-92.1637,3,2,0.667
+impatiens,impNCa,Hwy 109 just N of Wadesboro (NC09.site01),35.0436,-80.025,19,18,0.947
+impatiens,impNCb,Mt. Mitchell (NC09.site06),35.745,-82.2776,30,29,0.967
+impatiens,impNE,Branched Oak Lake R. A. (NE08.site01),40.96,-96.8638,15,15,1
+impatiens,impNE,Plattsmouth  (NE08.site02),40.9998,-95.8726,9,9,1
+impatiens,impNY,Wading River (Long Island) (NY09.site04),40.9444,-72.8361,16,16,1
+impatiens,impNY,SUNY Stony Brook (Long Island) (NY09.site05),40.9239,-73.1238,24,23,0.958
+impatiens,impOH,S of Fletcher (OH09.site05),40.0979,-84.1159,20,20,1
+impatiens,impPA,Sinnemahoninc St Park (PA09.site01),41.4028,-78.0264,30,29,0.967
+impatiens,impTX,Big Thicket National Preserve (TX08.site04),30.6711,-94.7184,5,5,1
+impatiens,impVA,Hwy 47 near jcn Hwy 460 (VA09.site04),37.2557,-78.6809,24,20,0.833
+impatiens,impWIa,Hwy 13 near I90 (WI08.site05),43.6265,-89.8061,23,23,1
+impatiens,impWIb,Hwy 16 east of Sparta (WI08.site04),43.9427,-90.749,24,23,0.958
+impatiens,impWIc,"University of WI, Madison Arboretum (WI08.site06)",43.041,-89.4315,24,24,1
+bimaculatus,bimIA,Pella IA (IA09.site02),41.4071,-92.871,22,19,0.864
+bimaculatus,bimILa,Castle Rock State Park (IL08.site02),41.9783,-89.357,9,8,0.889
+bimaculatus,bimILa,Castle Rock State Park (IL09.site04),41.9783,-89.357,9,7,0.778
+bimaculatus,bimILb,Havana (Hwy 78) (IL08.site08),40.2533,-90.0879,7,5,0.714
+bimaculatus,bimILc,Chain O'Lakes State Park (IL08.site03),42.4605,-88.1922,3,3,1
+bimaculatus,bimILc,Illinois Beach State Park (IL08.site04),42.4253,-87.8056,7,6,0.857
+bimaculatus,bimILd,Murphysboro (Hwy 149) (IL08.site01),37.7735,-89.4186,27,22,0.815
+bimaculatus,bimINa,Winamac (US35) (IN08.site05),41.0231,-86.5835,27,25,0.926
+bimaculatus,bimINb,Nebraska (US50) (IN08.site04),39.0653,-85.4376,13,13,1
+bimaculatus,bimINc,Alamo (Hwy 234) (IN08.site01),39.9602,-87.0686,17,17,1
+bimaculatus,bimKY,Hwy 60 just west of Frankfort (KY09.site06),38.1641,-84.9442,10,9,0.9
+bimaculatus,bimMAa,"Ashby Fire Dept, Rt 119 (MA09.site01)",42.6797,-71.8281,13,12,0.923
+bimaculatus,bimMAb,Rt 7 on CT/MA border (MA09.site03),42.0654,-73.3283,24,22,0.917
+bimaculatus,bimMNa,Sakatah State Park (MN08.site05),44.2196,-93.2283,22,20,0.909
+bimaculatus,bimMNb,Red Wing (MN08.site01),44.5577,-92.4883,24,19,0.792
+bimaculatus,bimMOa,"Drovers Prairie, MO",38.5318,-93.2952,2,2,1
+bimaculatus,bimMOa,"Shaw Nature Reserve, MO (2008) (MO08.site02)",38.4834,-90.823,11,11,1
+bimaculatus,bimMOa,Litzsinger Prairie (MO08.site04),38.6226,-90.3771,14,11,0.786
+bimaculatus,bimMOa,"Shaw Nature Preserve, MO (2009) (MO09.site01)",38.4682,-90.8174,10,10,1
+bimaculatus,bimMOa,"Tucker Prairie, MO",38.9511,-92.0054,2,2,1
+bimaculatus,bimMOAR,West of Ozark National Forest (AR08.site01),36.1015,-94.4352,2,2,1
+bimaculatus,bimMOAR,"Hwy 60, 1 mi past Billings, MO (MO08.site08)",37.0566,-93.5678,7,6,0.857
+bimaculatus,bimNCa,US221 north of Marion (NC09.site05),35.8935,-81.9367,7,6,0.857
+bimaculatus,bimNCa,Mt Mitchell (NC09.site06),35.745,-82.2776,3,3,1
+bimaculatus,bimNCVA,Hwy 66 10 mi E of Mt Airy (NC09.site02),36.4704,-80.3947,6,6,1
+bimaculatus,bimNCVA,Hwy 58 near Big Reed Island Creek (VA09.site02),36.7229,-80.5809,6,6,1
+bimaculatus,bimNEa,"Dannebrog, NE (NE09.site01)",41.1255,-98.5542,16,10,0.625
+bimaculatus,bimNEb,"Plattsmouth, NE  (NE08.site02)",40.9998,-95.8726,7,7,1
+bimaculatus,bimNYa,"Wading River (Long Island), NY (NY09.site04)",40.9444,-72.8361,6,6,1
+bimaculatus,bimNYa,SUNY Stony Brook (Long Island) (NY09.site05),40.9239,-73.1238,6,6,1
+bimaculatus,bimNYb,"Rt 96A, off of Seneca Lake (NY09.site02)",42.6817,-76.8511,9,9,1
+bimaculatus,bimOHa,"5mi North of Wooster, on Rt83. (OH09.site03)",40.9082,-81.9792,19,18,0.947
+bimaculatus,bimOHb,"105 South, Junction of 590 (OH09.site02)",41.4938,-83.2199,25,19,0.76
+bimaculatus,bimPA,nr Sinnemahoninc St Park (PA09.site01),41.4028,-78.0264,28,28,1
+bimaculatus,bimSD,Hwy 385 (SD08.site02A),43.6644,-103.5894,1,1,--
+bimaculatus,bimSD,Hwy 14 near DeSmet (SD08.site04),44.3717,-97.5246,20,13,0.65
+bimaculatus,bimTNa,Cherokee Nat Forest (TN09.site04),35.9228,-82.9772,19,17,0.895
+bimaculatus,bimTNb,Hwy 68 ~3mi S of Coker Creek (TN09.site06),35.241,-84.3182,14,14,1
+bimaculatus,bimVT,"0.5 Mi SW of Ludlow, on Hwy 100 (VT09.site01)",43.4144,-72.7055,8,7,0.875
+bimaculatus,bimVT,Deerfield Valley Elementary (VT09.site02),42.8884,-72.8616,15,13,0.867
+bimaculatus,bimWIa,Madison (WI08.site01),43.041,-89.4315,6,5,0.833
+bimaculatus,bimWIb,Wisconsin Dells (2008) (WI08.site03),43.6422,-89.8111,11,11,1
+bimaculatus,bimWIc,2 km w of Wyeville (WI08.site02),44.03,-90.4203,20,16,0.8
+pensylvanicus,penAR,West of Ozark National Forest (AR08.site01),36.1015,-94.4352,6,6,1
+pensylvanicus,penCO,"Bristol, CO",38.1143,-102.3113,3,3,1
+pensylvanicus,peneastUS,Hwy 109 just N of Wadesboro (NC09.site01),35.0436,-80.025,1,1,--
+pensylvanicus,peneastUS,"Hwy 62, near Alamance  (NC09.site03)",35.9806,-79.5572,1,1,--
+pensylvanicus,peneastUS,"Sumter National Forest, SC (SC09.site02)",34.4436,-81.7554,1,1,--
+pensylvanicus,peneastUS,"Hwy 261 N of Boykin, SC (SC09.site03)",34.1564,-80.5743,2,2,1
+pensylvanicus,penILa,"near Hewitville/Taylorville, IL (2008) (IL08.site13)",39.5248,-89.3284,17,10,0.588
+pensylvanicus,penILa,"near Hewitville/Taylorville, IL (2009) (IL09.site03)",39.5111,-89.3416,2,2,1
+pensylvanicus,penILb,near Galton (Hwy 45) (IL08.site15),39.7606,-88.2974,21,15,0.714
+pensylvanicus,penILb,"Pesotum, IL (IL09.site06)",39.9372,-88.2706,10,5,0.5
+pensylvanicus,penILc,Hwy 146 1.5 mi east of I57 (IL08.site17),40.3004,-89.8433,20,9,0.45
+pensylvanicus,penILd,Murphysboro (Hwy 149) (IL08.site01b),37.7735,-89.4186,11,10,0.909
+pensylvanicus,penILd,near Dixon Springs S.P. (IL08.site16),37.3793,-88.5923,8,8,1
+pensylvanicus,penILd,near Sand Ridge State Park (IL09.site07),37.4471,-89.1175,4,3,0.75
+pensylvanicus,penKSa,Hwy 4 at South Gypsum Rd. (KS08.site02),38.6966,-97.4281,3,3,1
+pensylvanicus,penKSa,8 mi. east of Rush Center (Hwy 96) (KS08.site04),38.4647,-99.1695,5,5,1
+pensylvanicus,penKSa,Council Grove Lake (KS09.site03),38.6872,-96.4928,3,3,1
+pensylvanicus,penKSb,5 mi. North of Williamstown (KS08.site01),39.1443,-95.5016,24,23,0.958
+pensylvanicus,penLA,Barksdale AF Base 1mi NW of Lucky (LA09.site01),32.5258,-93.6794,8,8,1
+pensylvanicus,penLA,Jcn Hwy4 at Davis Loop (LA09.site02),32.2689,-93.0218,37,30,0.811
+pensylvanicus,penMOa,Friendly Prairie (Friendly Prairie),38.5511,-93.293,1,1,--
+pensylvanicus,penMOa,Tucker Prairie (MO08.site05),38.949,-91.9898,1,1,--
+pensylvanicus,penMOa,between Rocheport & Prathersville (MO09.site04),38.9897,-92.5157,14,11,0.786
+pensylvanicus,penMOb,Busch Conservation Area (MO08.site01),38.7097,-90.749,2,2,1
+pensylvanicus,penMOb,Litzsinger Prairie (MO08.site04),38.6226,-90.3771,3,2,0.667
+pensylvanicus,penMOb,Shaw Nature Preserve (2009) (MO09.site01),38.4682,-90.8174,1,1,--
+pensylvanicus,penMOb,Shaw Nature Preserve (2009b) (MO09.site02),38.4804,-90.8234,2,2,1
+pensylvanicus,penMOIA,Hwy 63 N of Oskaloosa (IA08.site03),41.3298,-92.6473,6,4,0.667
+pensylvanicus,penMOIA,Atlanta (Hwy 63 & Road M) (MO08.site07),39.8987,-92.4737,2,2,1
+pensylvanicus,penMOIA,Hwy 15 near Iowa border (MO08.site09),40.5002,-92.1637,4,1,0.25
+pensylvanicus,penMOIA,Hwy53 just S of Kirksville (MO09.site05),40.1658,-92.5716,2,2,1
+pensylvanicus,penMOKS,"Cherokee, KS ",37.3394,-94.8323,2,2,1
+pensylvanicus,penMOKS,"Billings, MO (MO08.site08)",37.0566,-93.5678,2,2,1
+pensylvanicus,penMOKS,"Billings, MO (MO09.site03)",36.9619,-93.6843,24,18,0.75
+pensylvanicus,penMS,Lowndes and Oktibbeha Co border (MS09.site03),33.5544,-88.6417,26,22,0.846
+pensylvanicus,penNE,Branched Oak Lake R. A. (NE08.site01),40.96,-96.8638,1,1,--
+pensylvanicus,penNE,Rt11 .5 mi S of 58 intersection (NE09.site01),41.1255,-98.5542,1,1,--
+pensylvanicus,penNE,"Hwy 70, 3 mi S of 91 (NE09.site02)",41.7404,-98.8093,9,9,1
+pensylvanicus,penOKa,"Hwy 9, 1 mi. E of Norman (OK08.site02)",35.1892,-97.3647,16,14,0.875
+pensylvanicus,penOKa,nr Lake Thunderbird SP (OK09.Site02),35.254,-97.2653,8,3,0.375
+pensylvanicus,penOKb,Mead (OK09.Site01),33.9987,-96.5354,7,6,0.857
+pensylvanicus,penOKc,Wichita Mountains WR (2008) (OK08.site01),34.7842,-98.5135,9,9,1
+pensylvanicus,penOKc,Wichita Mountains WR (2009) (OK09.Site03),34.7344,-98.5878,1,1,--
+pensylvanicus,penSDa,Hwy 83 near Pierre (SD08.site03),44.2907,-100.3331,14,13,0.929
+pensylvanicus,penSDb,Viborg (SD08.site05),43.1921,-97.0808,15,12,0.8
+pensylvanicus,penTXa,Austin (TX08.site01),30.1856,-97.8705,20,11,0.55
+pensylvanicus,penTXa,"Hwy 290, 1.5 mi west of Elgin (TX08.site02)",30.3509,-97.4504,20,18,0.9
+pensylvanicus,penTXa,"Hwy290 Elgin, TX (TX09.site03)",30.348,-97.3847,8,2,0.25
+pensylvanicus,penTXb,Big Thicket National Preserve (TX08.site04),30.6711,-94.7184,7,7,1
+pensylvanicus,penTXc,"Rising Star, TX (TX09.site02)",32.0995,-98.9643,14,8,0.571
+pensylvanicus,penTXd,Galveston Island (TX08.site03),29.095,-95.1042,20,4,0.2
+pensylvanicus,penTXd,Galveston Island (TX08.site05),29.0868,-95.1168,6,2,0.333
+vosnesenskii,vosBoeingFieldKingWA,Boeing Field; King WA,47.54,-122.3,16,14,0.875
+vosnesenskii,vosCapitolSFThurstonWA,Capitol SF; Thurston WA,46.9606,-123.1023,19,15,0.789
+vosnesenskii,vosCallahanTrinity,Callahan Trinity CA,41.2998,-122.7486,16,16,1
+vosnesenskii,vosHwy101ACoosOR,Hwy 101A; Coos OR,43.2717,-124.2616,18,18,1
+vosnesenskii,vosIndianCreekSiskiyouOR,Indian Creek; Siskiyou OR,41.9658,-123.5029,46,30,0.652
+vosnesenskii,vosLakeviewLakeOR,Lakeview Lake OR,42.1836,-120.349,21,18,0.857
+vosnesenskii,vosLewisWA,"Hw121, Lewis WA",46.522,-122.5581,24,20,0.833
+vosnesenskii,vosLOTWOR,Lake O’ the Woods; Klamath OR,42.3893,-122.2148,25,21,0.84
+vosnesenskii,vosLovellCynClarkNV,Lovell Canyon; Clark NV,36.1666,-115.5758,10,9,0.9
+vosnesenskii,vosMarVistaSanJuanWA,Mar Vista; San Juan WA,48.4775,-123.0644,10,9,0.9
+vosnesenskii,vosMercedLakeMariposaCA,Merced Lake; Mariposa CA,37.744,-119.432,34,21,0.618
+vosnesenskii,vosMtAshlandJacksonOR,Mt. Ashland; Jackson OR,42.0835,-122.7306,78,59,0.756
+vosnesenskii,vosMtHoodMeadowsHoodRiverOR,Mt. Hood Meadows; Hood River OR,45.3251,-121.636,12,10,0.833
+vosnesenskii,vosOlympicNFMasonWA,Olympic NF; Mason WA,47.387,-123.3113,15,10,0.667
+vosnesenskii,vosPinnaclesSanBenitoCA,Pinnacles; San Benito CA,36.4713,-121.1932,26,22,0.846
+vosnesenskii,vosPortAngelesClallamWA,Port Angeles; Clallam WA,48.1189,-123.4296,36,23,0.639
+vosnesenskii,vosTroutCreekDeschutesOR,Trout Creek; Deschutes OR,44.2436,-121.6965,56,36,0.643
+vosnesenskii,vosVictoriaBC,Victoria B.C.,48.4669,-123.4663,5,5,1
+vosnesenskii,vosWyethHoodRiverOR,Wyeth Hood River OR,45.691,-121.7656,12,8,0.667
+bifarius,bifAnatoneWA,Anatone WA,46.1083,-117.2458,18,18,1
+bifarius,bifBakerOR,"Baker, OR",45.0065,-117.5794,19,19,1
+bifarius,bifBakerOR,"Baker, OR",44.9684,-117.432,18,18,1
+bifarius,bifBrushLakeBoundryID,Brush Lake Boundary ID,48.8529,-116.279,14,14,1
+bifarius,bifCashmereWA,Cashmere WA,47.6376,-120.4418,8,8,1
+bifarius,bifClearCreekUT,Clear Creek UT,41.9491,-113.3495,17,17,1
+bifarius,bifColumbiaWA,Columbia WA,46.0934,-117.8767,6,6,1
+bifarius,bifDaggettUT,Daggett UT,40.8429,-109.9965,8,8,1
+bifarius,bifEldoraLakeCO,Eldora Lake CO,39.9404,-105.5595,17,9,0.529
+bifarius,bifFairbanksAK,Fairbanks AK,64.8378,-147.7164,8,8,1
+bifarius,bifGarfieldUT,Garfield UT,37.9638,-111.7195,25,22,0.88
+bifarius,bifHoodRiverOR,Hood River OR,45.3251,-121.636,26,25,0.962
+bifarius,bifHungryHorseFlatheadMT,Hungry Horse Flathead MT,48.3045,-113.9841,23,23,1
+bifarius,bifLakeviewOR,Lakeview OR,42.1836,-120.349,12,12,1
+bifarius,bifLamoilleNV,Lamoille NV,40.6642,-115.4472,5,5,1
+bifarius,bifLangdonLakeOR,Langdon Lake; Umatilla OR,45.7762,-118.0818,14,13,0.929
+bifarius,bifLemoloOR,Lemolo OR,43.3194,-122.1884,24,24,1
+bifarius,bifLoloMT,Lolo MT,46.7082,-114.5266,32,31,0.969
+bifarius,bifLOTW,Lake of the Woods OR,42.3893,-122.2148,13,12,0.923
+bifarius,bifLouploupWA,Loup Loup WA,48.393,-119.9032,21,21,1
+bifarius,bifMtAshlandOR,Mt Ashland OR,42.0835,-122.7306,15,15,1
+bifarius,bifOrcasWA,Turtleback WA,48.6411,-122.9768,20,15,0.75
+bifarius,bifOrcasWA,Deer Harbor WA,48.6217,-123.0006,8,8,1
+bifarius,bifOurayCO,Ouray CO,38.0017,-107.6943,11,9,0.818
+bifarius,bifPintarLakeMT,Pintar Lake MT,45.8387,-113.4375,12,11,0.917
+bifarius,bifPowderBigHornWY,Powder Big Horn WY,44.1649,-107.2138,21,19,0.905
+bifarius,bifRaftRiverMeadowsUT,Raft River Meadows UT,41.9,-113.4005,13,13,1
+bifarius,bifRavallMT,"Ravall, MT",45.6922,-113.9524,26,24,0.923
+bifarius,bifSanJuanWA,Beaverton WA,48.5502,-123.0319,5,5,1
+bifarius,bifSanJuanWA,Westside Preserve WA,48.5064,-123.1406,23,18,0.783
+bifarius,bifSkagit1WA,Skagit WA,48.5191,-120.7341,8,8,1
+bifarius,bifSnowyRangeWY,Snowy Range WY,41.3464,-106.1843,22,19,0.864
+bifarius,bifSwansonMontroseCO,Swanson Montrose CO,38.323,-107.4761,26,25,0.962
+bifarius,bifTetonWY,Teton WY,43.7801,-110.963,25,23,0.92
+bifarius,bifThetisLakeBC,Thetis Lake BC,48.4669,-123.4663,10,10,1
+bifarius,bifTonyGroveUT,Tony Grove UT,41.8944,-111.6425,14,13,0.929
+bifarius,bifWhitePassWA,White Pass WA,46.6384,-121.3897,28,26,0.929
+bifarius,bifYosemiteMT,Yosemite MT,37.744,-119.432,15,14,0.933
+occidentalis,occboulderCO,"Dry Gulch Rd, Estes Park, CO",40.39179,-105.4876,4,4,1
+occidentalis,occboulderCO,"Eldora Lake, 0.65 km ENE, Arapaho NF, CO",39.94036,-105.5595,1,1,--
+occidentalis,occchaffeeCO,"Daley Gulch, San Isabel NF, CO",38.83969,-105.9892,5,3,0.6
+occidentalis,occgunnisonCO,"1.20 km NNE Mount Crested Butte, CO",38.9186,-106.9599,16,14,0.875
+occidentalis,occgunnisonCO,"2.61 km NNW Crested Butte, CO",38.8908,-106.9951,13,8,0.615
+occidentalis,occlakeviewklamathOR,"1.15 km WNW Mt. Ashland, OR",42.0835,-122.7306,1,1,--
+occidentalis,occlakeviewklamathOR,"Castle Point, 6.0 km NW, Rogue River NF, OR",42.9031,-122.3013,1,1,--
+occidentalis,occlakeviewklamathOR,"Grizzly Peak Trailhead, Rogue River NF, OR",42.27179,-122.6074,1,1,--
+occidentalis,occlakeviewklamathOR,Lake of the Woods Meadow OR (2007),42.38925,-122.2148,1,1,--
+occidentalis,occlakeviewklamathOR,Lake of the Woods Meadow OR (2008),42.38925,-122.2148,2,2,1
+occidentalis,occlakeviewklamathOR,Lake of the Woods Meadow OR (2009),42.38925,-122.2148,5,4,0.8
+occidentalis,occlakeviewklamathOR,"Lakeview, OR",42.1836,-120.349,5,4,0.8
+occidentalis,occMT,"Beaverhead NF, MT",44.75118,-111.2638,2,2,1
+occidentalis,occMT,"Hebgen Lake, MT",44.7438,-111.259,2,2,1
+occidentalis,occMT,"Hungry Horse Dam, MT",48.30446,-113.9841,5,5,1
+occidentalis,occMT,"Lower Thompson Lake, MT",48.02376,-115.0123,1,1,--
+occidentalis,occMT,"Gallatin National Forest, MT",45.31757,-110.567,1,1,--
+occidentalis,occMT,"Silver Crest Ski Area, Lewis National Forest, MT",46.85804,-110.6782,2,2,1
+occidentalis,occraftriverUT,"Clear Creek, UT",41.94909,-113.3495,22,12,0.545
+occidentalis,occraftriverUT,"Independence Lake, UT",42.2158,-113.6573,1,1,--
+occidentalis,occraftriverUT,"One Mile Fork, UT",41.96012,-113.4488,1,1,--
+occidentalis,occspokaneWA,"Spokane Airport, WA",47.6325,-117.5139,5,4,0.8
+occidentalis,occtonygroveuintahUT,"Cache Co., UT",41.89436,-111.6425,1,1,--
+occidentalis,occtonygroveuintahUT,"Logan, UT",41.75778,-111.8117,4,3,0.75
+occidentalis,occtonygroveuintahUT,"Spirit Lake, UT",40.8429,-109.9965,2,2,1
+occidentalis,occtonygroveuintahUT,"Tony Grove, UT",41.89436,-111.6425,2,2,1
+occidentalis,occwallowaOR,"La Grande, 18.66 km S, OR",45.15706,-118.063,5,3,0.6
+occidentalis,occwallowaOR,"Medical Springs, 6.6 km W, OR",45.01301,-117.5715,1,1,--
+occidentalis,occWY,"Ryan Park, 7.69 km E, Medicine Bow NF, WY",41.32207,-106.4123,1,1,--
+occidentalis,occWY,"Sinks Canyon Campground, Shoshone NF, WY",42.73656,-108.8366,1,1,--
+occidentalis,occWY,"Snowy Range Ski Resort, Medicine Bow NF, WY",41.34644,-106.1843,1,1,--

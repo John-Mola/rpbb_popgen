@@ -30,11 +30,12 @@ library(ecodist)
 gen_rpbb_flt <- readRDS("./analyses/analyses_output/03a01_gen_rpbb_flt.Rdata")
 
 # for whatever reason, was having weird downstream issues with Green Bay being last in the list despite being properly ordered elsehwere...not usre...but this fixes it!
-gen_rpbb_flt$pop <- factor(gen_rpbb_flt$pop, levels = c("Appalachian", "Central Wisconsin", "Chicago", "Decorah", "Green Bay", "Iowa City", "Madison", "Milwaukee", "North Illinois", "North Milwaukee", "Quad Cities", "SE Minnesota", "Twin Cities"))
+gen_rpbb_flt$pop <- factor(gen_rpbb_flt$pop, levels = c("Twin Cities", "SE Minnesota", "Iowa City", "Decorah",  "Quad Cities", "Madison", "Central Wisconsin",  "North Illinois","Milwaukee",  "Chicago", "North Milwaukee", "Green Bay",  "Appalachian"))
 
 df_joined_clusters <- readRDS("./data/data_output/output_01c_df_cluster100_pw_distances.Rdata")
 
-df_centroids <- readRDS("./data/data_output/output_01c_df_cluster100_centroids.Rdata")
+df_centroids <- readRDS("./data/data_output/output_01c_df_cluster100_centroids.Rdata") %>% 
+  arrange(factor(named_cluster100, levels = c("Twin Cities", "SE Minnesota", "Iowa City", "Decorah",  "Quad Cities", "Madison", "Central Wisconsin",  "North Illinois","Milwaukee",  "Chicago", "North Milwaukee", "Green Bay",  "Appalachian")))
 
 
 # FINDING PAIRWISE FST VALUES ---------------------------------------------
@@ -99,3 +100,60 @@ saveRDS(mod_mantel_spearman, "./analyses/analyses_output/03a03_output_mod_mantel
 
 saveRDS(fst.matrix, "./analyses/analyses_output/03a03_fst_matrix.Rdata")
 
+
+
+
+### sanity check of excluding appalachian sites; conclusion --> IBD still occurs. 
+
+# gen_rpbb_flt$pop <- factor(gen_rpbb_flt$pop, levels = c("Twin Cities", "SE Minnesota", "Iowa City", "Decorah",  "Quad Cities", "Madison", "Central Wisconsin",  "North Illinois","Milwaukee",  "Chicago", "North Milwaukee", "Green Bay",  "Appalachian"))
+# 
+# gen_rpbb_flt_noapp <- gen_rpbb_flt[pop=c(1:12)]
+# 
+# dist_fst <- genet.dist(gen_rpbb_flt_noapp, method = "WC84")
+# # 
+# # # Convert dist object to data.frame
+# # fst.matrix <- as.matrix(dist_fst)
+# # ind <- which( lower.tri(fst.matrix, diag = FALSE), arr.ind = TRUE)
+# # fst.df <- data.frame(Site1 = dimnames(fst.matrix)[[2]][ind[,2]],
+# #                      Site2 = dimnames(fst.matrix)[[1]][ind[,1]],
+# #                      Fst = fst.matrix[ ind ] %>% round(digits = 3))
+# # 
+# # fst.df <- fst.df %>% 
+# #   filter(Site1 != "Appalachian", Site2 != "Appalachian")
+# 
+# # MATCHING TO CLUSTERS
+# 
+# df_fst <- fst.df %>% 
+#   rowwise() %>%
+#   mutate(pair_name = paste0(sort(c(Site1, Site2)), collapse = ", "))
+# 
+# df_flt_joined <- dplyr::select(df_joined_clusters, name, distance)
+# 
+# df_fst_join <- left_join(df_fst, df_flt_joined, by = c("pair_name" = "name"))
+# # 
+# df_fst_join %>%
+#   ggplot(., aes(x = distance/1000, y = Fst)) +
+#   geom_jitter(size = 3.5, alpha = 0.5) +
+#   geom_smooth(method = "lm") +
+#   # geom_smooth(color = "red") +
+#   theme_classic(base_size = 15) +
+#   labs(x = "Distance Between Centroids (km)", y = "Fst")
+# 
+# 
+# # FITTING SIMPLE LINEAR MODELS --------------------------------------------
+# 
+# # lm(Fst ~ distance, data = df_fst_join) %>% summary()
+# # lm(Fst ~ log(distance), data = df_fst_join) %>% summary()
+# 
+# 
+# # MANTEL TEST -------------------------------------------------------------
+# 
+# df_centroids_noapp <- df_centroids %>% filter(named_cluster100 != "Appalachian")
+# dist_sites <- dist(cbind(df_centroids_noapp$lat_m_center, df_centroids_noapp$long_m_center))
+# 
+# #because of how data are distributed, it might make more sense to do the test on a log scale for distance...another approach is to use the spearman method instead
+# (mod_mantel_pearson <- vegan::mantel(dist_fst, dist_sites))
+# (mod_mantel_log <- vegan::mantel(dist_fst, log(dist_sites)))
+# (mod_mantel_spearman <- vegan::mantel(dist_fst, dist_sites, method = "spearman"))
+# 
+# 

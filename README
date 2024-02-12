@@ -1,0 +1,54 @@
+# README
+
+**CAUTION** Results sensitive to lat-long for users of this dataset will be slightly different than the published version due to the need to obscure coordinates of collections of an endangered species. If precise reproducibility is required, and necessary credentials/permits are held by the research team, exact coordinates can be provided upon request. 
+
+
+## EXPLANATION OF FILES AND DIRECTORY STRUCTURE
+
+This repository is intended to document the code behind the project "Range-wide genetic analysis of an endangered bumble bee (Bombus affinis) reveals population structure, isolation by distance, and low colony abundance". The code is all written in R. 
+
+Anyone who downloads this repository should be able to reconstruct the results of the analysis. Two steps require downloading software outside of R: COLONY and STRUCTURE. Included within these scripts are the input steps to feed into these pieces of software, and then the wrangling steps to take the output and wrangle it in R. The scripts indicate when you will need to run these analyses outside of R, but for convenience all outputs of COLONY and STRUCTURE are provided. 
+
+The scripts are all intended to be run in alpha-numerical order (e.g. 01a, 01b, 02a, 02a01, ...). Occassionally scripts have oddly long sub-prefixes (e.g. 02a01b...), this exists simply because I had some prior branch, but the idea is still the same, if you sort by name, the scripts are in the order they are intended to be run. 
+
+For convenience, this directory has the outputs of all data wrangling and data analysis steps already included (though not all figures, necessarily). To conduct a clean run, you could delete all of the files in data_output and analyses_output, then run everything to yield clean outputs. 
+
+
+Should you have any questions or encounter issues, please contact me at john.mola@colostate.edu
+
+---------
+
+data/data_wrangling/
+
+01b_wrangle... -- conducts some basic data cleaning
+01c_spatial_data... - cluster into putative populations
+01d_merge_genotype... - combine genotype data with specimen metadata
+
+analyses/
+
+02a01_preparing... -- filters and prepares data for COLONY program
+02c01_batch... -- further prepares a batch run (i.e. all putative pops separately) for COLONY
+
+[intermediate steps run in COLONY]
+
+03a_create_geneind ... -- creates a genind object from the output of COLONY and for use in estimation of pop-gen statistics
+03a01_quality... -- checks HWE, LD, etc
+03a02_genetic... -- calculates F-statistics, allelic richness, etc from genind object
+03a03_Fst_calc... -- runs models to check pairwise Fst across range
+03b_diploid... -- counts frequency of diploid males
+03c_capwire... -- runs genetic mark-recapture on COLONY output to determine colony abundance
+03d_colony_site... -- compares B. affinis worker:colony ratios to those from Cameron et al. 2011
+03e_STRUCTURE... -- prepares data to be run in program STRUCTURE, which is run externally, and then wrangles the data after STRUCTURE outputs are produced
+03f_AMOVA... -- runs AMOVA procedure
+03g_dapc... -- runs DAPC procedure
+
+figures/figure_wrangling
+
+04a_... -- generates Figure 1 map
+04a_figure_supplement... -- generates supplemental map
+04b_... -- generates figure of het, allelic richness, etc
+04c_... -- generates Fst pairwise figures
+04d_... -- generates output figures from STRUCTURE
+04e_... -- generates DAPC figure
+04g_... -- generates figure comparing Cameron et al. 2011 data to ours
+
